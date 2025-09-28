@@ -17,7 +17,7 @@ const eboard = [
         major: "Computer Science",
         imageUrl: "/images/officers/ynalois-pangilinan2.jpg",
         linkedin: "https://www.linkedin.com/in/ynalois-pangilinan",
-        github: "",
+        github: "https://github.com/ynaloisp/",
         email: "ynaloispangilinan@gmail.com",
     },
     {
