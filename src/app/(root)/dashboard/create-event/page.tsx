@@ -6,43 +6,55 @@ import ProtectedRoute from "../../../../components/ProtectedRoutes";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../../firebase.js";
 import axios from "axios";
+import { Key } from "lucide-react";
 
 export default function Page() {
-	const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     date: "",
     time: "",
     location: "",
     description: "",
-    imageUrl: "",
+    imageUrl: [""],
   });
+  const [tempFiles, setTempFiles] = useState<FileList>();
 
-	const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name != "media") setFormData((prev) => ({ ...prev, [name]: value }));
+    else {
+      const { files } = e.target;
+      if (!files) return;
+      setTempFiles(files);
+    }
   };
 
-	const submitForm = async (e) => {
+  const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(db, "events"), formData);
+      let urls: string[] = [];
+      if (tempFiles) {
+        urls = await convertURL(tempFiles);
+      }
+
+      const docRef = await addDoc(collection(db, "events"), {
+        ...formData,
+        imageUrl: urls,
+      });
+
       console.log("Document ID: ", docRef.id);
     } catch (e) {
       console.error("Error: ", e);
     }
   };
 
-  const handleChange = async (e) => {
-    const { files } = e.target;
-    
-    if (files && files.length > 0) {
-      const file = files[0];
-      const url = await uploadPic(file);
-      if (url) {
-        setFormData((prev) => ({ ...prev, imageUrl: url }));
-      }
-    }
-    console.log(formData);
+  const convertURL = async (files: FileList) => {
+    if (!files) return [];
+
+    const fileArray = Array.from(files);
+    const urls = await Promise.all(fileArray.map((file) => uploadPic(file)));
+
+    return urls.filter((url): url is string => Boolean(url));
   };
 
   const uploadPic = async (file: File) => {
@@ -130,7 +142,7 @@ export default function Page() {
             <input
               type="file"
               accept="image/*"
-              onChange={handleChange}
+              onChange={handleInputChange}
               name="media"
               multiple
             />
