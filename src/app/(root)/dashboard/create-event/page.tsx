@@ -6,28 +6,45 @@ import ProtectedRoute from "../../../../components/ProtectedRoutes";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../../firebase.js";
 import axios from "axios";
-import { Key } from "lucide-react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { describe } from "node:test";
+import { Description } from "@radix-ui/react-toast";
 
 export default function Page() {
   const [formData, setFormData] = useState({
     name: "",
     date: "",
-    time: "",
+    startTime: "",
+    endTime: "",
     location: "",
     description: "",
-    imageUrl: [""],
+    coverImage: "",
+    gallery: [""],
   });
   const [tempFiles, setTempFiles] = useState<FileList>();
+  const [tempCoverImage, setTempCoverImage] = useState<File>();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name != "media") setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name != "gallery" && name != "coverImage")
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    else if(name == "coverImage"){
+      const { files } = e.target;
+      if (!files) return;
+      const file = files[0];
+      setTempCoverImage(file);
+    }
     else {
       const { files } = e.target;
       if (!files) return;
       setTempFiles(files);
     }
   };
+
+  const handleDescription = (text: string) =>{
+    setFormData((prev) => ({ ...prev, description: text }));
+  }
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,9 +54,15 @@ export default function Page() {
         urls = await convertURL(tempFiles);
       }
 
+      let coverImageUrl: string | null = null;
+      if (tempCoverImage) {
+        coverImageUrl = await uploadPic(tempCoverImage);
+      }
+
       const docRef = await addDoc(collection(db, "events"), {
         ...formData,
-        imageUrl: urls,
+        coverImage: coverImageUrl,
+        gallery: urls,
       });
 
       console.log("Document ID: ", docRef.id);
@@ -79,6 +102,8 @@ export default function Page() {
     }
   };
 
+  console.log(formData);
+
   return (
     <ProtectedRoute>
       <Card className="rounded-md p-5 font-inter ml-[10%] mr-[10%] mt-[5%] mb-[10%] w-fit justify-self-center">
@@ -107,12 +132,23 @@ export default function Page() {
             </div>
 
             <div className="flex gap-x-5">
-              <label htmlFor="time">Time</label>
+              <label htmlFor="startTime">Start Time</label>
               <input
                 type="time"
-                name="time"
-                id="time"
-                value={formData.time}
+                name="startTime"
+                id="startTime"
+                value={formData.startTime}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="flex gap-x-5">
+              <label htmlFor="endTime">End Time</label>
+              <input
+                type="time"
+                name="endTime"
+                id="endTime"
+                value={formData.endTime}
                 onChange={handleInputChange}
               />
             </div>
@@ -130,22 +166,34 @@ export default function Page() {
 
             <div className="flex gap-x-5">
               <label htmlFor="description">Description</label>
-              <input
-                type="text"
-                name="description"
+              <ReactQuill
                 id="description"
+                theme="snow"
                 value={formData.description}
-                onChange={handleInputChange}
+                onChange={handleDescription}
               />
             </div>
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleInputChange}
-              name="media"
-              multiple
-            />
+            <div>
+              <h2>Gallery</h2>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleInputChange}
+                name="gallery"
+                multiple
+              />
+            </div>
+
+            <div>
+              <h2>Cover Image</h2>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleInputChange}
+                name="coverImage"
+              />
+            </div>
 
             <Button type="submit">Submit</Button>
           </form>
