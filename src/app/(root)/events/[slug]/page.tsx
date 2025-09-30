@@ -131,7 +131,7 @@ const Events: React.FC<CardProps> = () => {
                   <div className="relative w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto">
                     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                       <Image
-                        src={event?.gallery?.[0] || ""}
+                        src={imageList[currentImageIndex] || ""}
                         alt={`Gallery image ${currentImageIndex + 1}`}
                         fill
                         unoptimized

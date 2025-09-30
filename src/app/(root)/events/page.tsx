@@ -3,17 +3,12 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import { Car } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
-import { blogPosts } from "./[slug]/test";
 import { db } from "../../../firebase.js";
 import { getDocs, collection } from "firebase/firestore";
 import { useState, useEffect } from "react";
@@ -33,9 +28,8 @@ export default function Events() {
     };
 
     fetchDocuments();
-    
   }, []);
-  console.log(events); 
+  console.log(events);
 
   return (
     <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16">

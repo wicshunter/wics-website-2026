@@ -8,8 +8,6 @@ import { db } from "../../../../firebase.js";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { describe } from "node:test";
-import { Description } from "@radix-ui/react-toast";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -29,22 +27,21 @@ export default function Page() {
     const { name, value } = e.target;
     if (name != "gallery" && name != "coverImage")
       setFormData((prev) => ({ ...prev, [name]: value }));
-    else if(name == "coverImage"){
+    else if (name == "coverImage") {
       const { files } = e.target;
       if (!files) return;
       const file = files[0];
       setTempCoverImage(file);
-    }
-    else {
+    } else {
       const { files } = e.target;
       if (!files) return;
       setTempFiles(files);
     }
   };
 
-  const handleDescription = (text: string) =>{
+  const handleDescription = (text: string) => {
     setFormData((prev) => ({ ...prev, description: text }));
-  }
+  };
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
