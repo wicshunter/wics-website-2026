@@ -49,25 +49,7 @@ const eboard = [
   },
 ];
 
-const team = [
-  {
-    title: "Kripamoye Biswas",
-    description: "Social Media Manager",
-    major: "Computer Science & Math Major",
-    imageUrl: "/images/officers/Kripamoye-Biswas.png",
-    linkedin: "https://www.linkedin.com/in/kripamoyebiswas",
-    github: "",
-    email: "biswaskripamoye@gmail.com",
-  },
-  {
-    title: "Angela Zhang",
-    description: "Social Media Manager",
-    major: "Computer Science",
-    imageUrl: "/images/officers/angela-z.jpeg",
-    linkedin: "",
-    github: "",
-    email: "hunterwics@gmail.com",
-  },
+const communityOfficer = [
   {
     title: "Sanjida Fairuse",
     description: "Community Officer",
@@ -86,6 +68,30 @@ const team = [
     github: "",
     email: "hunterwics@gmail.com",
   },
+];
+
+const graphicDesigner = [
+  {
+    title: "Riya",
+    description: "Graphic Designer",
+    major: "Computer Science",
+    imageUrl: "/images/officers/abakariyyah-ahmed.JPG",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
+  {
+    title: "Yaritza Yanez",
+    description: "Graphic Designer",
+    major: "Computer Science",
+    imageUrl: "/images/officers/yaritza-yanez.jpeg",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
+];
+
+const socialMediaManager = [
   {
     title: "Michelle Rivera Perez",
     description: "Social Media Manager",
@@ -96,19 +102,19 @@ const team = [
     email: "hunterwics@gmail.com",
   },
   {
-    title: "Riya",
-    description: "Graphic Designer",
-    major: "Computer Science",
-    imageUrl: "/images/officers/abakariyyah-ahmed.JPG", 
-    linkedin: "",
+    title: "Kripamoye Biswas",
+    description: "Social Media Manager",
+    major: "Computer Science & Math Major",
+    imageUrl: "/images/officers/Kripamoye-Biswas.png",
+    linkedin: "https://www.linkedin.com/in/kripamoyebiswas",
     github: "",
-    email: "hunterwics@gmail.com",
+    email: "biswaskripamoye@gmail.com",
   },
   {
-    title: "Yaritza Yanez",
-    description: "Graphic Designer",
+    title: "Angela Zhang",
+    description: "Social Media Manager",
     major: "Computer Science",
-    imageUrl: "/images/officers/yaritza-yanez.jpeg",
+    imageUrl: "/images/officers/angela-z.jpeg",
     linkedin: "",
     github: "",
     email: "hunterwics@gmail.com",
@@ -184,4 +190,4 @@ const workshop = [
   },
 ];
 
-export { faculty, eboard, team, webMaster, workshop };
+export { faculty, eboard, communityOfficer, graphicDesigner, socialMediaManager, webMaster, workshop };

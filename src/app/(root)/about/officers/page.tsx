@@ -1,8 +1,16 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import OfficerCard from './card';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { faculty, eboard, team, webMaster, workshop } from './data';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import OfficerCard from "./card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  faculty,
+  eboard,
+  communityOfficer,
+  graphicDesigner,
+  socialMediaManager,
+  webMaster,
+  workshop,
+} from "./data";
 
 /**
  * Officers Component
@@ -27,11 +35,25 @@ import { faculty, eboard, team, webMaster, workshop } from './data';
  */
 
 const TABS = [
-  { value: 'faculty', label: 'Faculty Advisor', data: faculty },
-  { value: 'eboard', label: 'Executive Board', data: eboard },
-  { value: 'team', label: 'Team', data: team },
-  { value: 'web', label: 'Web Masters', data: webMaster },
-  { value: 'workshop', label: 'Workshop Coordinator', data: workshop },
+  { value: "faculty", label: "Faculty Advisors", data: faculty },
+  { value: "eboard", label: "Executive Board", data: eboard },
+  {
+    value: "socialMedia",
+    label: "Social Media Managers",
+    data: socialMediaManager,
+  },
+  {
+    value: "graphicDesigner",
+    label: "Graphic Designers",
+    data: graphicDesigner,
+  },
+  { value: "web", label: "Web Masters", data: webMaster },
+  { value: "workshop", label: "Workshop Coordinators", data: workshop },
+  {
+    value: "communityOfficer",
+    label: "Community Officers",
+    data: communityOfficer,
+  },
 ];
 
 export default function Officers() {
@@ -53,20 +75,23 @@ export default function Officers() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#fdf2f8] via-white to-[#fdf2f8]">
+    <div className="min-h-screen">
       {/* Header Section */}
       <div className="container mx-auto w-4/5 h-[40%] p-7 pt-20 sm:p-10 rounded-lg flex flex-row justify-between items-center">
         <div className="w-[50%] h-40 flex flex-col justify-around">
           <h1 className="text-black text-5xl font-bold">Meet Our Team</h1>
           <p className="text-[#4B5563] text-lg font-light">
-            The dedicated individuals working to empower and promote women in technology at Hunter College.
+            The dedicated individuals working to empower and promote women in
+            technology at Hunter College.
           </p>
         </div>
 
         <div className="relative flex flex-col w-[45%] h-60 text-left items-left justify-center rounded-lg p-10">
           <div className="absolute z-10 left-[10%]">
             <h3 className="text-black text-lg font-bold">Contact us:</h3>
-            <p className="pt-4 text-lg font-normal text-[#4B5563]">Reach the team:</p>
+            <p className="pt-4 text-lg font-normal text-[#4B5563]">
+              Reach the team:
+            </p>
             <a
               href="mailto:hunterwics@gmail.com"
               className="text-[#f9679d] text-lg font-normal underline hover:text-[#f9679d]"
@@ -82,21 +107,23 @@ export default function Officers() {
       </div>
 
       {/* Tabs Section */}
-      <Tabs defaultValue="faculty" className="w-[400px]">
-        <TabsList className="ml-[10%]">
-          {TABS.map((tab) => (
-            <TabsTrigger key={tab.value} value={tab.value}>
-              {tab.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+      <div className="container mx-auto">
+        <Tabs defaultValue="faculty" className="w-full">
+          <TabsList className="flex justify-center">
+            {TABS.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-        {TABS.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value} className="w-screen">
-            {renderTabContent(tab.data)}
-          </TabsContent>
-        ))}
-      </Tabs>
+          {TABS.map((tab) => (
+            <TabsContent key={tab.value} value={tab.value}>
+              {renderTabContent(tab.data)}
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
 
       {/* Call to Action */}
       <div className="pb-20 px-4">
@@ -105,11 +132,17 @@ export default function Officers() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#fce7f3] to-[#fdf2f8]"></div>
             <CardContent className="relative p-8 md:p-12">
               <div className="max-w-2xl mx-auto text-center">
-                <h2 className="text-3xl font-bold mb-4">Want to Get Involved?</h2>
+                <h2 className="text-3xl font-bold mb-4">
+                  Want to Get Involved?
+                </h2>
                 <p className="text-black mb-8">
-                    We&apos;re always looking for passionate individuals to join our team. Reach out to learn more about leadership opportunities!
+                  We&apos;re always looking for passionate individuals to join
+                  our team. Reach out to learn more about leadership
+                  opportunities!
                 </p>
-                <Button className="bg-hotpink hover:bg-[#be185d]">Contact Us</Button>
+                <Button className="bg-hotpink hover:bg-[#be185d]">
+                  Contact Us
+                </Button>
               </div>
             </CardContent>
           </Card>
