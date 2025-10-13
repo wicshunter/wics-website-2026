@@ -33,7 +33,7 @@ const eboard = [
     title: "Lena Ngo",
     description: "Secretary",
     major: "Computer Science",
-    imageUrl: "/images/officers/Lena-ngo.jpeg",
+    imageUrl: "/images/officers/lena-ngo.jpeg",
     linkedin: "https://www.linkedin.com/in/lena-ngo-08098b259/",
     github: "",
     email: "lenango14@gmail.com",
