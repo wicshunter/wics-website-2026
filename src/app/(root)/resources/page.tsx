@@ -13,7 +13,7 @@ import Image from "next/image";
 
 export default function Resources() {
     return (
-        <div className="font-inter min-h-screen space-y-16 mb-[15%] mt-[1%]">
+        <div className="font-inter min-h-screen space-y-16 mb-[15%] mt-[1%] bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
             <div className="flex flex-col gap-4 items-center justify-center pt-10 ml-[25%] mr-[25%] text-center">
                 <h1 className="text-4xl font-bold">Resources</h1>
                 <p className="text-grey text-lg">

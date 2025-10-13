@@ -17,8 +17,8 @@ import { blogPosts } from "./[slug]/test";
 
 export default function Events() {
   return (
-    <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16">
-      <div className="relative group transition-transform duration-500 hover:rotate-0">
+    <div className="font-inter space-y-16 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
+      <div className="relative group transition-transform duration-500 hover:rotate-0 ml-[10%] mr-[10%] mt-[5%]">
         <div className="absolute inset-0 rotate-3 rounded-2xl bg-bannerGradient transition-transform duration-300 group-hover:rotate-0"></div>
         <div className="bg-white flex flex-col gap-5 rounded-2xl p-10 pb-[5%] -rotate-1 transition-transform duration-300 group-hover:rotate-0">
           <h1 className="font-bold text-4xl">Upcoming Events</h1>
@@ -29,7 +29,7 @@ export default function Events() {
         </div>
       </div>
 
-      <div className="font-bold space-y-6">
+      <div className="font-bold space-y-6 ml-[10%] mr-[10%]">
         <h1 className="text-2xl">Upcoming Event</h1>
         <Card className="space-y-3 border-none">
           <CardHeader className="p-0">
@@ -73,7 +73,7 @@ export default function Events() {
         </Card>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 ml-[10%] mr-[10%]">
         <h1 className="font-bold text-2xl">Past Event Highlights</h1>
         <div className="grid grid-cols-3 gap-10">
           {blogPosts.slice(0, 3).map((post) => (
@@ -114,7 +114,7 @@ export default function Events() {
         </div>
       </div>
 
-      <div className="bg-cardGradient rounded-2xl p-10 border border-1">
+      <div className="bg-cardGradient rounded-2xl p-10 border border-1 ml-[10%] mr-[10%]">
         <div className="flex flex-col gap-4 items-center text-center space-y-4">
           <h1 className="font-bold text-2xl">Want to Host an Event?</h1>
           <p className="font-medium text-grey">

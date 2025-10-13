@@ -48,7 +48,7 @@ const Events: React.FC<CardProps> = () => {
   };
 
   return (
-    <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16">
+    <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
       <div className="font-bold space-y-6">
         <h1 className="text-4xl">{blogPosts[id].title}</h1>
         <div className="flex flex-row gap-2 text-sm font-medium text-lightg">

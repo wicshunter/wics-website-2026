@@ -32,10 +32,11 @@ const OfficerCard: React.FC<CardProps> = ({
       {/* Image */}
       <Image
         src={imageUrl}
-        alt={''}
+        alt={`${title} headshot`}
         width={300}
         height={300}
         className="z-10 w-32 h-32 rounded-full object-cover shadow-card mx-auto mt-4"
+        style={{ imageOrientation: 'from-image' }}
       />
 
       {/* Content */}
