@@ -61,11 +61,25 @@
   }
 }
 
-/* globals.css */
-.event-description h1 { font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0; }
-.event-description h2 { font-size: 1.25rem; font-weight: 600; margin: 0.5rem 0; }
-.event-description ul { list-style: disc; margin-left: 1.25rem; }
-.event-description li { margin-bottom: 0.25rem; }
+.markdown-content h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.markdown-content h2 {
+  font-size: 2rem; 
+  font-weight: bold;
+}
+
+.markdown-content h3 {
+  font-size: 1.5rem; 
+  font-weight: bold;
+}
+
+.markdown-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
 
 
 @layer base {

@@ -6,8 +6,6 @@ import ProtectedRoute from "../../../../components/ProtectedRoutes";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../../firebase.js";
 import axios from "axios";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -29,12 +27,78 @@ export default function Page() {
   const [tempFiles, setTempFiles] = useState<FileList>();
   const [tempCoverImage, setTempCoverImage] = useState<File>();
   const [statusValue, setStatusValue] = useState("draft");
+  const template: string = `# Heading 1
+      ## Heading 2
+      Paragraph
+
+      ### Heading 3
+      Basic text can be formatted in various ways:
+      - **Bold text** using \`**text**\`
+      - *Italic text* using \`*text*\`
+      - ***Bold and italic*** using \`***text***\`
+      - ~~Strikethrough~~ using \`~~text~~\`
+      - \`inline code\` using backticks
+
+      ### Code Blocks with Syntax Highlighting
+
+      ${"```typescript"}
+      // Advanced TypeScript Example
+      interface Document {
+        id: string;
+        title: string;
+        content: string;
+        lastModified: Date;
+        metadata?: {
+          author: string;
+          tags: string[];
+        };
+      }
+      ${"```"}
+
+      ### Lists
+
+      - List Item 1
+      - List Item 2 
+
+      1. Number 1
+      2. Number 2
+
+      ### Links and Images
+
+      Visit our [Documentation](https://mdcode.io/docs) for more details.
+
+      ![Editor Screenshot](url)
+
+      ### 📝 Advanced Features
+      **Keyboard Shortcuts**
+        - \`Ctrl/Cmd + B\` for bold
+        - \`Ctrl/Cmd + I\` for italic
+        - \`Ctrl/Cmd + K\` for links
+        - \`Ctrl/Cmd + S\` to save
+
+      > 💡 **Pro Tip:** Use the toolbar buttons or keyboard shortcuts for faster editing.
+
+      ### 📁 Project Structure
+
+      ${"```"}
+      mdcode/
+      ├── src/
+      │   ├── components/
+      │   │   ├── Editor/
+      │   │   ├── Preview/
+      │   │   └── Toolbar/
+      │   ├── hooks/
+      │   └── utils/
+      ├── public/
+      └── package.json
+      ${"```"}
+      `;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name != "gallery" && name != "coverImage")
       setFormData((prev) => ({ ...prev, [name]: value }));
-    else if (name == "coverImage") {
+    else if (name === "coverImage") {
       const { files } = e.target;
       if (!files) return;
       const file = files[0];
@@ -46,8 +110,8 @@ export default function Page() {
     }
   };
 
-  const handleDescription = (text: string) => {
-    setFormData((prev) => ({ ...prev, description: text }));
+  const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, description: e.target.value }));
   };
 
   const submitForm = async (e: React.FormEvent) => {
@@ -106,19 +170,19 @@ export default function Page() {
     }
   };
 
-   const handleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
-     setStatusValue((event.target as HTMLInputElement).value);
-     setFormData((prev) => ({
-       ...prev,
-       status: (event.target as HTMLInputElement).value,
-     }));
-   };
+  const handleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStatusValue((event.target as HTMLInputElement).value);
+    setFormData((prev) => ({
+      ...prev,
+      status: (event.target as HTMLInputElement).value,
+    }));
+  };
 
   console.log(formData);
 
   return (
     <ProtectedRoute>
-      <Card className="rounded-md p-5 font-inter ml-[10%] mr-[10%] mt-[5%] mb-[10%] w-fit justify-self-center">
+      <Card className="rounded-md p-5 font-inter ml-[25%] mr-[25%] mt-[5%] mb-[10%] w-fit justify-self-center">
         <CardContent>
           <form className="flex flex-col gap-y-10" onSubmit={submitForm}>
             <div className="flex gap-x-5">
@@ -176,13 +240,14 @@ export default function Page() {
               />
             </div>
 
-            <div className="flex gap-x-5">
+            <div className="flex flex-col gap-x-5">
               <label htmlFor="description">Description</label>
-              <ReactQuill
+              <textarea
                 id="description"
-                theme="snow"
                 value={formData.description}
                 onChange={handleDescription}
+                className="border-2 min-h-[300px] min-w-[600px]"
+                placeholder={template}
               />
             </div>
 

@@ -11,7 +11,9 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import { db } from "../../../firebase.js";
 import { getDocs, collection } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface EventType {
   id: string;
@@ -41,7 +43,7 @@ export default function Events() {
 
     fetchDocuments();
   }, []);
-  
+
   console.log(events);
 
   return (
@@ -113,7 +115,7 @@ export default function Events() {
                 <CardHeader className="p-4">
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                     <Image
-                      src={post?.coverImage}
+                      src={post?.coverImage || ""}
                       alt="External Image"
                       fill
                       unoptimized
@@ -123,12 +125,11 @@ export default function Events() {
                 </CardHeader>
                 <CardContent>
                   <p className="font-bold">{post?.name}</p>
-                    <p
-                      className="event-description text-sm text-500 text-lightg"
-                      dangerouslySetInnerHTML={{
-                        __html: post?.description?.slice(0, 50) || "",
-                      }}
-                    />
+                  <div className="markdown-content">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {post?.description?.slice(0, 50) || ""}
+                    </ReactMarkdown>
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Link

@@ -15,6 +15,8 @@ import { blogPosts } from "./test";
 import { useParams } from "next/navigation";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../../../../firebase.js";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface CardProps {}
 
@@ -43,19 +45,19 @@ const Events: React.FC<CardProps> = () => {
 
         if (docSnap.exists()) {
           let temp = {
-            name: docSnap.data().name,
-            date: docSnap.data().name,
-            startTime: docSnap.data().startTime,
-            endTime: docSnap.data().endTime,
-            location: docSnap.data().location,
-            description: docSnap.data().description,
-            coverImage: docSnap.data().coverImage,
-            gallery: docSnap.data().gallery,
-            status: docSnap.data().status,
+            name: docSnap.data().name || "",
+            date: docSnap.data().date || "",
+            startTime: docSnap.data().startTime || "",
+            endTime: docSnap.data().endTime || "",
+            location: docSnap.data().location || "",
+            description: docSnap.data().description || "",
+            coverImage: docSnap.data().coverImage || "",
+            gallery: docSnap.data().gallery || [""],
+            status: docSnap.data().status || "",
           };
 
           setEvent(temp);
-          setImageList(docSnap.data().gallery);
+          setImageList(docSnap.data().gallery || [""]);
         } else {
           console.log("No such document!");
         }
@@ -69,7 +71,6 @@ const Events: React.FC<CardProps> = () => {
   console.log("Events: ", event);
 
   const post = blogPosts.find((post) => post.slug === slug);
-
   const id = post ? blogPosts.indexOf(post) : 1;
 
   const goToNextImage = () => {
@@ -115,12 +116,11 @@ const Events: React.FC<CardProps> = () => {
                 <div className="flex flex-col md:flex-row gap-8 w-full items-center justify-center p-4">
                   {/* Content section */}
                   <div className="flex flex-col items-left gap-4 w-full md:w-[55%] order-1 md:order-1">
-                    <div
-                      className="event-description"
-                      dangerouslySetInnerHTML={{
-                        __html: event?.description || "",
-                      }}
-                    />
+                    <div className="markdown-content">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {event?.description || ""}
+                      </ReactMarkdown>
+                    </div>
                   </div>
 
                   {/* Image section */}
