@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProtectedRoute from "../../../components/ProtectedRoutes";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,13 +9,56 @@ import { auth } from "../../../firebase";
 import { db } from "../../../firebase.js";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState<"all" | "published" | "drafts">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "published" | "drafts">(
+    "all"
+  );
   const [media, setMedia] = useState("");
+  const [events, setEvents] = useState([{}]);
+  const [published, setPublished] = useState([{}]);
+  const [drafts, setDrafts] = useState([{}]);
+  const [totalEvents, setTotalEvents] = useState(0);
+  const [totalDraft, setTotalDraft] = useState(0);
+  const [totalPublished, setTotalPublished] = useState(0);
+  const [totalPhotos, setTotalPhotos] = useState(0);
+
+  useEffect(() => {
+    const getEvents = async () => {
+      const querySnapshot = await getDocs(collection(db, "events"));
+      const eventsArray = [{}];
+      querySnapshot.forEach((doc) => {
+        eventsArray.push({ id: doc.id, data: doc.data() });
+      });
+
+      eventsArray.shift();
+      setEvents(eventsArray);
+      setTotalEvents(eventsArray.length);
+
+      let draftArray = eventsArray.filter((e) => e.data?.status === "draft");
+      setDrafts(draftArray);
+      setTotalDraft(draftArray.length);
+
+      let publishedArray = eventsArray.filter(
+        (e) => e.data?.status === "published"
+      );
+      setPublished(publishedArray);
+      setTotalPublished(publishedArray.length);
+
+      let photoCount = 0;
+      eventsArray.forEach((e) => {
+        photoCount += e.data?.gallery?.length || 0;
+      });
+      setTotalPhotos(photoCount);
+    };
+
+    getEvents();
+  }, []);
+  console.log(events);
 
   // Keeping this here in case we need in future.
   const AddToWhiteList = async () => {
@@ -27,26 +70,13 @@ export default function Login() {
     }
   };
 
-  const stats = [
-    { number: "15", label: "Total Events" },
-    { number: "8", label: "Published" },
-    { number: "6", label: "Drafts" },
-    { number: "142", label: "Total Photos" },
-  ];
-
-  const events = [
-    { title: "Web Development Workshop", date: "Mar 15, 2024", category: "Workshop", photos: 24, status: "Published" as const },
-    { title: "Web Development Workshop", date: "Apr 02, 2024", category: "Talk", photos: 18, status: "Published" as const },
-    { title: "Web Development Workshop", date: "May 10, 2024", category: "Hackathon", photos: 36, status: "Draft" as const },
-    { title: "Web Development Workshop", date: "Jun 21, 2024", category: "Workshop", photos: 12, status: "Published" as const },
-    { title: "Web Development Workshop", date: "Jul 05, 2024", category: "Panel", photos: 9, status: "Draft" as const },
-  ];
-
   const filtered =
     activeTab === "all"
       ? events
       : events.filter((e) =>
-          activeTab === "published" ? e.status === "Published" : e.status === "Draft"
+          activeTab === "published"
+            ? e.status === "Published"
+            : e.status === "Draft"
         );
 
   return (
@@ -56,22 +86,50 @@ export default function Login() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="font-bold text-[2rem] md:text-[2.4rem]">Admin Dashboard</h1>
-              <p className="text-gray-600">Manage event blogs, highlights, and photos</p>
+              <h1 className="font-bold text-[2rem] md:text-[2.4rem]">
+                Admin Dashboard
+              </h1>
+              <p className="text-gray-600">
+                Manage event blogs, highlights, and photos
+              </p>
             </div>
-            <Button className="bg-hotpink hover:bg-[#be185d] text-white">
+            <Button
+              className="bg-hotpink hover:bg-[#be185d] text-white"
+              onClick={() => router.push("/dashboard/create-event")}
+            >
               + Create New Event
             </Button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, index) => (
-              <Card key={index} className="p-6 rounded-2xl shadow-md bg-white">
-                <p className="text-2xl font-bold text-hotpink mb-1">{stat.number}</p>
-                <p className="text-gray-600 text-sm">{stat.label}</p>
-              </Card>
-            ))}
+            <Card className="p-6 rounded-2xl shadow-md bg-white">
+              <p className="text-2xl font-bold text-hotpink mb-1">
+                {totalEvents}
+              </p>
+              <p className="text-gray-600 text-sm">Total Events</p>
+            </Card>
+
+            <Card className="p-6 rounded-2xl shadow-md bg-white">
+              <p className="text-2xl font-bold text-hotpink mb-1">
+                {totalPublished}
+              </p>
+              <p className="text-gray-600 text-sm">Published</p>
+            </Card>
+
+            <Card className="p-6 rounded-2xl shadow-md bg-white">
+              <p className="text-2xl font-bold text-hotpink mb-1">
+                {totalDraft}
+              </p>
+              <p className="text-gray-600 text-sm">Drafts</p>
+            </Card>
+
+            <Card className="p-6 rounded-2xl shadow-md bg-white">
+              <p className="text-2xl font-bold text-hotpink mb-1">
+                {totalPhotos}
+              </p>
+              <p className="text-gray-600 text-sm">Total Photos</p>
+            </Card>
           </div>
 
           {/* Event Blogs */}
@@ -136,7 +194,9 @@ export default function Login() {
                 <tbody>
                   {filtered.map((e, idx) => (
                     <tr key={idx} className="border-t">
-                      <td className="py-4 px-4 font-medium text-gray-900">{e.title}</td>
+                      <td className="py-4 px-4 font-medium text-gray-900">
+                        {e.title}
+                      </td>
                       <td className="py-4 px-4 text-gray-700">{e.date}</td>
                       <td className="py-4 px-4 text-gray-700">{e.category}</td>
                       <td className="py-4 px-4 text-gray-700">{e.photos}</td>
@@ -157,14 +217,14 @@ export default function Login() {
                           aria-label="More actions"
                           className="p-2 rounded-md hover:bg-gray-100"
                         >
-                            <svg
+                          <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                             className="w-5 h-5 text-gray-600"
-                            >
+                          >
                             <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                            </svg>
+                          </svg>
                         </button>
                       </td>
                     </tr>

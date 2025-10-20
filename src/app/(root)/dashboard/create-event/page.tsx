@@ -9,6 +9,7 @@ import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+
 export default function Page() {
   const [formData, setFormData] = useState({
     name: "",
@@ -19,6 +20,7 @@ export default function Page() {
     description: "",
     coverImage: "",
     gallery: [""],
+    status: "",
   });
   const [tempFiles, setTempFiles] = useState<FileList>();
   const [tempCoverImage, setTempCoverImage] = useState<File>();
@@ -190,6 +192,11 @@ export default function Page() {
                 onChange={handleInputChange}
                 name="coverImage"
               />
+            </div>
+
+            <div>
+              <h2>Status</h2>
+              
             </div>
 
             <Button type="submit">Submit</Button>
