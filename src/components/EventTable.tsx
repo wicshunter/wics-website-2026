@@ -82,9 +82,14 @@ export default function EventTable({ events }) {
                         "aria-labelledby": "basic-button",
                       },
                     }}
+                    sx={{
+                      "& .MuiMenu-paper": {
+                        boxShadow: "0px 1px 5px 1px rgba(66, 68, 90, 0.05)",
+                      },
+                    }}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleClose}>Edit Event</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete Event</MenuItem>
                   </Menu>
                 </td>
               </tr>
