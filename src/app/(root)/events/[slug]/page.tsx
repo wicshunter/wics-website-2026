@@ -1,8 +1,7 @@
 "use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Calendar,
   Clock,
@@ -14,23 +13,39 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { blogPosts } from "./test";
 import { useParams } from "next/navigation";
-
-const imageList = [
-  "/images/officers/Sarah-Levitan.jpg",
-  "/images/event/Behavioral-Interview-Prep.png",
-  "/images/event/BTT-Info-Session.png",
-  "/images/event/cookie-decorating-team.jpg",
-  "/images/event/cookie-decorating-team.jpg",
-];
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../../../../firebase.js";
 
 interface CardProps {}
 
 const Events: React.FC<CardProps> = () => {
   const router = useRouter();
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [event, setEvent] = useState({});
+  const [imageList, setImageList] = useState([""]);
 
-  console.log("Slug:", slug);
+  useEffect(() => {
+    const fetchDocument = async () => {
+      try {
+        const docRef = doc(db, "events", slug);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setEvent(docSnap.data());
+          setImageList(docSnap.data().gallery);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchDocument();
+  }, []);
+  console.log("Events: ", event);
+
   const post = blogPosts.find((post) => post.slug === slug);
 
   const id = post ? blogPosts.indexOf(post) : 1;
@@ -50,19 +65,21 @@ const Events: React.FC<CardProps> = () => {
   return (
     <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
       <div className="font-bold space-y-6">
-        <h1 className="text-4xl">{blogPosts[id].title}</h1>
+        <h1 className="text-4xl">{event?.name || ""}</h1>
         <div className="flex flex-row gap-2 text-sm font-medium text-lightg">
           <div className="flex items-center gap-2">
             <Calendar strokeWidth={3} className="h-4 w-4 font-lg" />
-            <span>{blogPosts[id].date}</span>
+            <span>{event?.date || ""}</span>
           </div>
           <div className="flex items-center gap-2">
             <Clock strokeWidth={3} className="h-4 w-4" />
-            <span>{blogPosts[id].time}</span>
+            <span>
+              {event?.startTime || ""} - {event?.endTime || ""}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <MapPin strokeWidth={3} className="h-4 w-4" />
-            <span>{blogPosts[id].location}</span>
+            <span>{event?.location || ""}</span>
           </div>
         </div>
         <Tabs defaultValue="highlights" className="w-full">
@@ -76,24 +93,12 @@ const Events: React.FC<CardProps> = () => {
                 <div className="flex flex-col md:flex-row gap-8 w-full items-center justify-center p-4">
                   {/* Content section */}
                   <div className="flex flex-col items-left gap-4 w-full md:w-[55%] order-1 md:order-1">
-                    <h2 className="text-2xl">Event Highlights</h2>
-                    <p className="font-medium text-sm">
-                      {blogPosts[id].content}
-                    </p>
-                    <h2 className="text-xl">Key Takeaways</h2>
-                    <ul className="list-disc pl-5 space-y-2 font-medium text-sm">
-                      <li>
-                        Networking opportunities with industry professionals
-                      </li>
-                      <li>Insights into the latest technology trends</li>
-                      <li>Hands-on workshops and interactive sessions</li>
-                    </ul>
-                    <h2 className="text-xl">Speakers</h2>
-                    <ul className="list-disc pl-5 space-y-2 font-medium text-sm">
-                      {blogPosts[id].speakers.map((speaker, index) => (
-                        <li key={index}>{speaker}</li>
-                      ))}
-                    </ul>
+                    <div
+                      className="event-description"
+                      dangerouslySetInnerHTML={{
+                        __html: event?.description || "",
+                      }}
+                    />
                   </div>
 
                   {/* Image section */}
@@ -101,7 +106,7 @@ const Events: React.FC<CardProps> = () => {
                     <div className="relative w-full max-w-md overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                       <div className="aspect-[3/4] relative">
                         <Image
-                          src={blogPosts[id].coverImage}
+                          src={event?.coverImage || ""}
                           alt="Event Image"
                           fill
                           unoptimized
@@ -126,7 +131,7 @@ const Events: React.FC<CardProps> = () => {
                   <div className="relative w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto">
                     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                       <Image
-                        src={imageList[currentImageIndex]}
+                        src={imageList[currentImageIndex] || ""}
                         alt={`Gallery image ${currentImageIndex + 1}`}
                         fill
                         unoptimized

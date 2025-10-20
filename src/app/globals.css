@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: linear-gradient(90deg, rgba(253,242,248,1) 20%, rgba(255,255,255,1) 47%, rgba(253,242,248,1) 76%);
@@ -60,3 +61,33 @@
   }
 }
 
+/* globals.css */
+.event-description h1 { font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0; }
+.event-description h2 { font-size: 1.25rem; font-weight: 600; margin: 0.5rem 0; }
+.event-description ul { list-style: disc; margin-left: 1.25rem; }
+.event-description li { margin-bottom: 0.25rem; }
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    background: var(--background);
+    background-attachment: fixed;
+    background-size: cover; 
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base{
+  input{
+    @apply bg-gray-50 border rounded-sm p-1;
+  }
+}
+
+@layer base{
+  label{
+    @apply font-inter;
+  }
+}

@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
+    <div className="min-h-screen">
       <div className="pt-16 pb-16 px-4">
         <div className="container mx-auto">
           <div className="flex flex-cols-1 lg:flex-cols-2 gap-40 items-center justify-center">

@@ -7,11 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { setDoc, doc } from "firebase/firestore";
 import { auth } from "../../../firebase";
 import { db } from "../../../firebase.js";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "published" | "drafts">("all");
+  const [media, setMedia] = useState("");
 
   // Keeping this here in case we need in future.
   const AddToWhiteList = async () => {
