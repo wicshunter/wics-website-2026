@@ -14,6 +14,7 @@ import { getDocs, collection } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+export const dynamic = "force-dynamic";
 
 interface EventType {
   id: string;
