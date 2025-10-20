@@ -8,7 +8,11 @@ import { db } from "../../../../firebase.js";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -24,6 +28,8 @@ export default function Page() {
   });
   const [tempFiles, setTempFiles] = useState<FileList>();
   const [tempCoverImage, setTempCoverImage] = useState<File>();
+  const [statusValue, setStatusValue] = useState("draft");
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -100,6 +106,14 @@ export default function Page() {
       return null;
     }
   };
+
+   const handleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
+     setStatusValue((event.target as HTMLInputElement).value);
+     setFormData((prev) => ({
+       ...prev,
+       status: (event.target as HTMLInputElement).value,
+     }));
+   };
 
   console.log(formData);
 
@@ -195,8 +209,21 @@ export default function Page() {
             </div>
 
             <div>
-              <h2>Status</h2>
-              
+              <FormControl>
+                <FormLabel>Status</FormLabel>
+                <RadioGroup row value={statusValue} onChange={handleStatus}>
+                  <FormControlLabel
+                    value="published"
+                    control={<Radio />}
+                    label="Publish"
+                  />
+                  <FormControlLabel
+                    value="draft"
+                    control={<Radio />}
+                    label="Draft"
+                  />
+                </RadioGroup>
+              </FormControl>
             </div>
 
             <Button type="submit">Submit</Button>

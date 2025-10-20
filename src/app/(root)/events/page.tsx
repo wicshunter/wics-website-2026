@@ -110,14 +110,12 @@ export default function Events() {
                 </CardHeader>
                 <CardContent>
                   <p className="font-bold">{post?.name}</p>
-                  <p className="text-sm text-500 text-lightg">
                     <p
-                      className="event-description"
+                      className="event-description text-sm text-500 text-lightg"
                       dangerouslySetInnerHTML={{
-                        __html: post?.description || "",
+                        __html: post?.description?.slice(0, 50) || "",
                       }}
                     />
-                  </p>
                 </CardContent>
                 <CardFooter>
                   <Link
