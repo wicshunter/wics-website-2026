@@ -14,6 +14,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import EventTable from "@/components/EventTable";
 
 export default function Login() {
   const router = useRouter();
@@ -67,7 +68,9 @@ export default function Login() {
 
     getEvents();
   }, []);
-  console.log(events);
+
+  const handleTextChange = (_event: React.SyntheticEvent, newValue: number) =>
+    setTextValue(newValue);
 
   // Keeping this here in case we need in future.
   const AddToWhiteList = async () => {
@@ -79,18 +82,7 @@ export default function Login() {
     }
   };
 
-  const handleTextChange = (_event: React.SyntheticEvent, newValue: number) =>
-    setTextValue(newValue);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
-
-  const handleKeyChange = (e: KeyboardEvent) => {
-    if (e.key == "Enter") {
-      setTextValue(0);
-    }
-  };
+  console.log(events);
 
   return (
     <ProtectedRoute>
@@ -203,219 +195,34 @@ export default function Login() {
                   },
                 }}
               >
-                <Tab
-                  label="All Events"
-                  sx={{
-                    fontWeight: 600,
-                    "&.Mui-selected": {
-                      boxShadow: "0px 1px 2px 0px rgba(66, 68, 90, 0.05)",
-                    },
-                  }}
-                />
-                <Tab
-                  label="Published"
-                  sx={{
-                    fontWeight: 600,
-                    "&.Mui-selected": {
-                      boxShadow: "0px 1px 2px 0px rgba(66, 68, 90, 0.05)",
-                    },
-                  }}
-                />
-                <Tab
-                  label="Draft"
-                  sx={{
-                    fontWeight: 600,
-                    "&.Mui-selected": {
-                      boxShadow: "0px 1px 2px 0px rgba(66, 68, 90, 0.05)",
-                    },
-                  }}
-                />
+                {["All Events", "Published", "Draft"].map((label, i) => (
+                  <Tab
+                    key={label}
+                    label={label}
+                    sx={{
+                      fontWeight: 600,
+                      "&.Mui-selected": {
+                        boxShadow: "0px 1px 2px 0px rgba(66, 68, 90, 0.05)",
+                      },
+                    }}
+                  />
+                ))}
               </Tabs>
             </div>
 
             {/* Tables */}
-            {textValue === 0 && (
-              <div className="flex flex-col flex-1 gap-1 h-full w-full">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-gray-500">
-                        <th className="text-left py-3 px-4">Event Title</th>
-                        <th className="text-left py-3 px-4">Date</th>
-                        <th className="text-left py-3 px-4">Category</th>
-                        <th className="text-left py-3 px-4">Photos</th>
-                        <th className="text-left py-3 px-4">Status</th>
-                        <th className="text-right py-3 px-4">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events.map((e, idx) => (
-                        <tr key={idx} className="border-t">
-                          <td className="py-4 px-4 font-medium text-gray-900">
-                            {e.data?.name}
-                          </td>
-                          <td className="py-4 px-4 text-gray-700">
-                            {e.data?.date}
-                          </td>
-                          <td className="py-4 px-4 text-gray-700">
-                            {e.data?.category}
-                          </td>
-                          <td className="py-4 px-4 text-gray-700">
-                            {e.data?.gallery?.length}
-                          </td>
-                          <td className="py-4 px-4">
-                            {e.data?.status === "published" ? (
-                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-                                Published
-                              </Badge>
-                            ) : (
-                              <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">
-                                Draft
-                              </Badge>
-                            )}
-                          </td>
-                          <td className="py-4 px-4 text-right">
-                            <button
-                              type="button"
-                              aria-label="More actions"
-                              className="p-2 rounded-md hover:bg-gray-100"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5 text-gray-600"
-                              >
-                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                              </svg>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
+            {textValue === 0 && <EventTable events={events} />}
 
             {textValue === 1 && (
-              <div className="flex flex-col flex-1 gap-1 h-full w-full">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-gray-500">
-                        <th className="text-left py-3 px-4">Event Title</th>
-                        <th className="text-left py-3 px-4">Date</th>
-                        <th className="text-left py-3 px-4">Category</th>
-                        <th className="text-left py-3 px-4">Photos</th>
-                        <th className="text-left py-3 px-4">Status</th>
-                        <th className="text-right py-3 px-4">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events
-                        .filter((e) => e.data?.status === "published")
-                        .map((e, idx) => (
-                          <tr key={idx} className="border-t">
-                            <td className="py-4 px-4 font-medium text-gray-900">
-                              {e.data?.name}
-                            </td>
-                            <td className="py-4 px-4 text-gray-700">
-                              {e.data?.date}
-                            </td>
-                            <td className="py-4 px-4 text-gray-700">
-                              {e.data?.category}
-                            </td>
-                            <td className="py-4 px-4 text-gray-700">
-                              {e.data?.gallery?.length}
-                            </td>
-                            <td className="py-4 px-4">
-                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-                                Published
-                              </Badge>
-                            </td>
-                            <td className="py-4 px-4 text-right">
-                              <button
-                                type="button"
-                                aria-label="More actions"
-                                className="p-2 rounded-md hover:bg-gray-100"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                  className="w-5 h-5 text-gray-600"
-                                >
-                                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <EventTable
+                events={events.filter((e) => e?.data?.status === "published")}
+              />
             )}
 
             {textValue === 2 && (
-              <div className="flex flex-col flex-1 gap-1 h-full w-full">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-gray-500">
-                        <th className="text-left py-3 px-4">Event Title</th>
-                        <th className="text-left py-3 px-4">Date</th>
-                        <th className="text-left py-3 px-4">Category</th>
-                        <th className="text-left py-3 px-4">Photos</th>
-                        <th className="text-left py-3 px-4">Status</th>
-                        <th className="text-right py-3 px-4">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events
-                        .filter((e) => e.data?.status === "draft")
-                        .map((e, idx) => (
-                          <tr key={idx} className="border-t">
-                            <td className="py-4 px-4 font-medium text-gray-900">
-                              {e.data?.name}
-                            </td>
-                            <td className="py-4 px-4 text-gray-700">
-                              {e.data?.date}
-                            </td>
-                            <td className="py-4 px-4 text-gray-700">
-                              {e.data?.category}
-                            </td>
-                            <td className="py-4 px-4 text-gray-700">
-                              {e.data?.gallery?.length}
-                            </td>
-                            <td className="py-4 px-4">
-                              <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">
-                                Draft
-                              </Badge>
-                            </td>
-                            <td className="py-4 px-4 text-right">
-                              <button
-                                type="button"
-                                aria-label="More actions"
-                                className="p-2 rounded-md hover:bg-gray-100"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                  className="w-5 h-5 text-gray-600"
-                                >
-                                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <EventTable
+                events={events.filter((e) => e?.data?.status === "draft")}
+              />
             )}
           </Card>
         </div>
