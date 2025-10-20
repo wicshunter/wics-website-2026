@@ -22,7 +22,17 @@ const Events: React.FC<CardProps> = () => {
   const router = useRouter();
   const { slug } = useParams<{ slug: string }>();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [event, setEvent] = useState({});
+  const [event, setEvent] = useState({
+    name: "",
+    date: "",
+    startTime: "",
+    endTime: "",
+    location: "",
+    description: "",
+    coverImage: "",
+    gallery: [""],
+    status: "",
+  });
   const [imageList, setImageList] = useState([""]);
 
   useEffect(() => {
@@ -32,7 +42,19 @@ const Events: React.FC<CardProps> = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setEvent(docSnap.data());
+          let temp = {
+            name: docSnap.data().name,
+            date: docSnap.data().name,
+            startTime: docSnap.data().startTime,
+            endTime: docSnap.data().endTime,
+            location: docSnap.data().location,
+            description: docSnap.data().description,
+            coverImage: docSnap.data().coverImage,
+            gallery: docSnap.data().gallery,
+            status: docSnap.data().status,
+          };
+
+          setEvent(temp);
           setImageList(docSnap.data().gallery);
         } else {
           console.log("No such document!");

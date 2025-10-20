@@ -6,7 +6,21 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 
-export default function EventTable({ events }) {
+interface EventType {
+  id: string;
+  data: {
+    name?: string;
+    status?: string;
+    gallery?: any[];
+    [key: string]: any;
+  };
+}
+
+type EventTableProps = {
+  events: EventType[];
+};
+
+export default function EventTable({ events }: EventTableProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 

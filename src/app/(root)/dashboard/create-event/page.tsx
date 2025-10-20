@@ -24,12 +24,11 @@ export default function Page() {
     description: "",
     coverImage: "",
     gallery: [""],
-    status: "",
+    status: "draft",
   });
   const [tempFiles, setTempFiles] = useState<FileList>();
   const [tempCoverImage, setTempCoverImage] = useState<File>();
   const [statusValue, setStatusValue] = useState("draft");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

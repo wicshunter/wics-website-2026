@@ -15,14 +15,23 @@ import Tab from "@mui/material/Tab";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import EventTable from "@/components/EventTable";
+interface EventType {
+  id: string;
+  data: {
+    name?: string;
+    status?: string;
+    gallery?: any[];
+    [key: string]: any;
+  };
+}
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [media, setMedia] = useState("");
-  const [allEvents, setAllEvents] = useState([{}]);
-  const [events, setEvents] = useState([{}]);
+  const [events, setEvents] = useState<EventType[]>([]);
+  const [allEvents, setAllEvents] = useState<EventType[]>([]);
   const [totalEvents, setTotalEvents] = useState(0);
   const [totalDraft, setTotalDraft] = useState(0);
   const [totalPublished, setTotalPublished] = useState(0);
@@ -43,12 +52,12 @@ export default function Login() {
   useEffect(() => {
     const getEvents = async () => {
       const querySnapshot = await getDocs(collection(db, "events"));
-      const eventsArray = [{}];
+      const eventsArray: EventType[] = [];
       querySnapshot.forEach((doc) => {
         eventsArray.push({ id: doc.id, data: doc.data() });
       });
 
-      eventsArray.shift();
+      // eventsArray.shift();
       setEvents(eventsArray);
       setAllEvents(eventsArray);
       setTotalEvents(eventsArray.length);

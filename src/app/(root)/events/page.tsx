@@ -13,22 +13,35 @@ import { db } from "../../../firebase.js";
 import { getDocs, collection } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
+interface EventType {
+  id: string;
+  name: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  description: string;
+  coverImage: string;
+  gallery: string[];
+  status: string;
+}
+
 export default function Events() {
-  const [events, setEvents] = useState([{}]);
+  const [events, setEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
     const fetchDocuments = async () => {
       const querySnapshot = await getDocs(collection(db, "events"));
-      const docs = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
+      const docs: EventType[] = querySnapshot.docs.map((doc) => {
+        const data = doc.data() as Omit<EventType, "id">;
+        return { id: doc.id, ...data };
+      });
       setEvents(docs);
     };
 
     fetchDocuments();
   }, []);
+  
   console.log(events);
 
   return (
