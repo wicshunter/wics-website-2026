@@ -20,8 +20,6 @@ export default function Login() {
   );
   const [media, setMedia] = useState("");
   const [events, setEvents] = useState([{}]);
-  const [published, setPublished] = useState([{}]);
-  const [drafts, setDrafts] = useState([{}]);
   const [totalEvents, setTotalEvents] = useState(0);
   const [totalDraft, setTotalDraft] = useState(0);
   const [totalPublished, setTotalPublished] = useState(0);
@@ -38,16 +36,12 @@ export default function Login() {
       eventsArray.shift();
       setEvents(eventsArray);
       setTotalEvents(eventsArray.length);
-
-      let draftArray = eventsArray.filter((e) => e.data?.status === "draft");
-      setDrafts(draftArray);
-      setTotalDraft(draftArray.length);
-
-      let publishedArray = eventsArray.filter(
-        (e) => e.data?.status === "published"
+      setTotalDraft(
+        eventsArray.filter((e) => e.data?.status === "draft").length
       );
-      setPublished(publishedArray);
-      setTotalPublished(publishedArray.length);
+      setTotalPublished(
+        eventsArray.filter((e) => e.data?.status === "published").length
+      );
 
       let photoCount = 0;
       eventsArray.forEach((e) => {
@@ -75,8 +69,8 @@ export default function Login() {
       ? events
       : events.filter((e) =>
           activeTab === "published"
-            ? e.status === "Published"
-            : e.status === "Draft"
+            ? e.data?.status === "published"
+            : e.data?.status === "draft"
         );
 
   return (
@@ -195,13 +189,19 @@ export default function Login() {
                   {filtered.map((e, idx) => (
                     <tr key={idx} className="border-t">
                       <td className="py-4 px-4 font-medium text-gray-900">
-                        {e.title}
+                        {e.data?.name}
                       </td>
-                      <td className="py-4 px-4 text-gray-700">{e.date}</td>
-                      <td className="py-4 px-4 text-gray-700">{e.category}</td>
-                      <td className="py-4 px-4 text-gray-700">{e.photos}</td>
+                      <td className="py-4 px-4 text-gray-700">
+                        {e.data?.date}
+                      </td>
+                      <td className="py-4 px-4 text-gray-700">
+                        {e.data?.category}
+                      </td>
+                      <td className="py-4 px-4 text-gray-700">
+                        {e.data?.gallery?.length}
+                      </td>
                       <td className="py-4 px-4">
-                        {e.status === "Published" ? (
+                        {e.data?.status === "published" ? (
                           <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
                             Published
                           </Badge>
