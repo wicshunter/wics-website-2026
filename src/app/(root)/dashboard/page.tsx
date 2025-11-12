@@ -3,18 +3,13 @@ import { useState, useEffect } from "react";
 import ProtectedRoute from "../../../components/ProtectedRoutes";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { setDoc, doc } from "firebase/firestore";
-import { auth } from "../../../firebase";
 import { db } from "../../../firebase.js";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import EventTable from "@/components/EventTable";
+
 interface EventType {
   id: string;
   data: {

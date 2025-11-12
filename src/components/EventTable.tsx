@@ -5,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
+import { useRouter } from 'next/navigation'
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../../src/firebase.js";
 
 interface EventType {
   id: string;
@@ -23,14 +26,40 @@ type EventTableProps = {
 export default function EventTable({ events }: EventTableProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
     setAnchorEl(event.currentTarget);
+    setSelectedEventId(id);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setSelectedEventId(null);
   };
+
+  const handleEdit = () => {
+    if (!selectedEventId) return;
+    console.log(selectedEventId);
+    setAnchorEl(null);
+    router.push(`dashboard/edit-event/${selectedEventId}`);
+  };
+
+  const handleDelete = async () => {
+    if (selectedEventId != null){
+      try{
+        await deleteDoc(doc(db, "events", selectedEventId));
+        setAnchorEl(null);
+        router.refresh();
+      }
+      catch (err: any){
+        console.log("Cant delete: ", err);
+      }
+    }
+  }
+
+  console.log(events);
 
   return (
     <div className="flex flex-col flex-1 gap-1 h-full w-full">
@@ -74,7 +103,7 @@ export default function EventTable({ events }: EventTableProps) {
                     aria-controls={open ? "menu" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
+                    onClick={(event) => handleClick(event, e.id)}
                     className="bg-white p-2 rounded-md hover:bg-gray-100"
                   >
                     <svg
@@ -102,8 +131,8 @@ export default function EventTable({ events }: EventTableProps) {
                       },
                     }}
                   >
-                    <MenuItem onClick={handleClose}>Edit Event</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete Event</MenuItem>
+                    <MenuItem onClick={handleEdit}>Edit Event</MenuItem>
+                    <MenuItem onClick={handleDelete}>Delete Event</MenuItem>
                   </Menu>
                 </td>
               </tr>
