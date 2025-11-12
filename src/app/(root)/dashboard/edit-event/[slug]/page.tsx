@@ -3,19 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 import ProtectedRoute from "../../../../../components/ProtectedRoutes";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { getDoc, doc, addDoc, collection, updateDoc } from "firebase/firestore";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../firebase.js";
-import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const { slug } = useParams<{ slug: string }>();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     date: "",
@@ -96,7 +96,7 @@ export default function Page() {
       └── package.json
       ${"```"}
       `;
-  const router = useRouter();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name != "gallery" && name != "coverImage")
@@ -142,7 +142,6 @@ export default function Page() {
 
     fetchDocument();
   }, []);
-  console.log(slug);
 
   const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, description: e.target.value }));
@@ -151,23 +150,26 @@ export default function Page() {
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Overrides the gallery and cover image 
       let urls: string[] = [];
       if (tempFiles) {
         urls = await convertURL(tempFiles);
       }
+      const allUrls = [...urls, ...formData.gallery];
 
       let coverImageUrl: string | null = null;
       if (tempCoverImage) {
         coverImageUrl = await uploadPic(tempCoverImage);
       }
+      else {
+        coverImageUrl = formData.coverImage;
+      }
 
       const docRef = await updateDoc(doc(db, "events", slug), {
         ...formData,
         coverImage: coverImageUrl,
-        gallery: urls,
+        gallery: allUrls,
       });
-      router.push( `dashboard/`);
+      // router.push(`/dashboard`);
     } catch (e) {
       console.error("Error: ", e);
     }
@@ -294,6 +296,15 @@ export default function Page() {
                 name="gallery"
                 multiple
               />
+
+              {formData?.gallery &&
+                <div className="flex gap-5">
+                  {formData?.gallery?.map((img: string, index: number) => (
+                    img &&
+                    <img key={index} src={img} width={200} />
+                  ))}
+                </div>
+              }
             </div>
 
             <div>
@@ -304,6 +315,10 @@ export default function Page() {
                 onChange={handleInputChange}
                 name="coverImage"
               />
+              {formData.coverImage &&
+                <img src={formData.coverImage} width={200} />
+              }
+
             </div>
 
             <div>
