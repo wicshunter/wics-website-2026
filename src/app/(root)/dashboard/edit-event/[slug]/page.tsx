@@ -151,6 +151,7 @@ export default function Page() {
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Overrides the gallery and cover image 
       let urls: string[] = [];
       if (tempFiles) {
         urls = await convertURL(tempFiles);
