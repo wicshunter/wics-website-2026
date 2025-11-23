@@ -10,7 +10,7 @@ import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import { db } from "../../../firebase.js";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -35,24 +35,38 @@ export default function Events() {
 
   useEffect(() => {
     const fetchDocuments = async () => {
-      const querySnapshot = await getDocs(collection(db, "events"));
+      const eventsRef = collection(db, "events");
+      const q = query(eventsRef, orderBy("date", "desc")); 
+      const querySnapshot = await getDocs(q);
+
       const docs: EventType[] = querySnapshot.docs.map((doc) => {
         const data = doc.data() as Omit<EventType, "id">;
         return { id: doc.id, ...data };
       });
+
       setEvents(docs);
     };
 
     fetchDocuments();
   }, []);
 
-  const handleSeeMore = () =>{
-    if (seeMore === true){
+  const handleSeeMore = () => {
+    if (seeMore === true) {
       setSeeMore(false);
     }
-    else{
+    else {
       setSeeMore(true);
     }
+  }
+
+  function formatTime(time: string) {
+    if (!time) return "";
+
+    const [hour, minute] = time.split(":").map(Number);
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+
+    return `${formattedHour}:${minute.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`;
   }
 
   console.log(events);
@@ -76,36 +90,35 @@ export default function Events() {
           <CardHeader className="p-0">
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
               <Image
-                src="https://th.bing.com/th/id/OIP.2N3yUqpMYG6VHxj1maGVpAHaEo?rs=1&pid=ImgDetMain"
+                src={events?.[0]?.coverImage || "https://th.bing.com/th/id/OIP.2N3yUqpMYG6VHxj1maGVpAHaEo?rs=1&pid=ImgDetMain"}
                 alt="External Image"
                 fill
                 unoptimized
-                className="object-cover"
+                className="object-contain"
               />
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <p className="text-hotpink font-medium text-sm">Workshop</p>
-              <h2 className="text-xl">Web Development Fundamentals</h2>
+              <h2 className="text-xl">{ events?.[0]?.name || "Web Development Fundamentals"}</h2>
             </div>
             <div className="flex flex-col gap-2 text-sm font-medium text-lightg">
               <div className="flex items-center gap-2">
                 <Calendar strokeWidth={3} className="h-4 w-4 font-lg" />
-                <span>March 15, 2025</span>
+                <span>{events?.[0]?.date || "March 15, 2025"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock strokeWidth={3} className="h-4 w-4" />
-                <span>2:00 PM - 4:00 PM</span>
+                <span>{(formatTime(events?.[0]?.startTime) + (events?.[0]?.endTime && ` - ${formatTime(events?.[0]?.endTime)}`)) || "2:00 PM - 4:00 PM"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin strokeWidth={3} className="h-4 w-4" />
-                <span>W605</span>
+                <span>{events?.[0]?.location || "W605"}</span>
               </div>
             </div>
             <p className="text-sm font-medium text-lightg">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              {events?.[0]?.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua."}
             </p>
           </CardContent>
           <CardFooter>
@@ -122,7 +135,7 @@ export default function Events() {
             (events?.slice(0, 3).map((post) => (
               <Card
                 key={post?.id}
-                className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl"
+                className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl flex flex-col justify-between"
               >
                 <CardHeader className="p-4">
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
@@ -139,7 +152,7 @@ export default function Events() {
                   <p className="font-bold">{post?.name}</p>
                   <div className="markdown-content">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {post?.description?.slice(0, 50) || ""}
+                      {post?.description?.slice(0, 100) + "" || ""}
                     </ReactMarkdown>
                   </div>
                 </CardContent>
@@ -148,14 +161,13 @@ export default function Events() {
                     href={`/events/${post?.id}`}
                     className="bg-white font-semibold rounded-lg w-full border border-1 p-2 text-center"
                   >
-                    <button>View Recap</button>
+                    <button className="">View Recap</button>
                   </Link>
                 </CardFooter>
               </Card>
             )))
-          :
-
-          (events?.map((post) => (
+            :
+            (events?.map((post) => (
               <Card
                 key={post?.id}
                 className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl"
@@ -193,9 +205,9 @@ export default function Events() {
         </div>
         <div className="flex flex-col items-center">
           <button className="bg-buttonGradient font-semibold rounded-lg p-2 pl-5 pr-5 text-grey mt-[2%]"
-          onClick={handleSeeMore}
+            onClick={handleSeeMore}
           >
-            See More
+            {!seeMore ? "See More": "See Less"}
           </button>
         </div>
       </div>

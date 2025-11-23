@@ -85,6 +85,16 @@ const Events: React.FC<CardProps> = () => {
     );
   };
 
+  function formatTime(time: string) {
+    if (!time) return "";
+
+    const [hour, minute] = time.split(":").map(Number);
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+
+    return `${formattedHour}:${minute.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`;
+  }
+
   return (
     <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
       <div className="font-bold space-y-6">
@@ -97,7 +107,7 @@ const Events: React.FC<CardProps> = () => {
           <div className="flex items-center gap-2">
             <Clock strokeWidth={3} className="h-4 w-4" />
             <span>
-              {event?.startTime || ""} - {event?.endTime || ""}
+              {formatTime(event?.startTime)}{event?.endTime && ` - ${formatTime(event.endTime)}`}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -113,9 +123,9 @@ const Events: React.FC<CardProps> = () => {
           <TabsContent value="highlights" className="space-y-4">
             <Card className="space-y-3 border border-gray-300">
               <CardContent className="space-y-4 pt-4">
-                <div className="flex flex-col md:flex-row gap-8 w-full items-center justify-center p-4">
+                <div className="flex flex-col md:flex-row gap-8 w-full p-4">
                   {/* Content section */}
-                  <div className="flex flex-col items-left gap-4 w-full md:w-[55%] order-1 md:order-1">
+                  <div className="flex flex-col items-left gap-4 w-full md:w-[55%] order-1 md:order-1 mt-10">
                     <div className="markdown-content">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {event?.description || ""}
