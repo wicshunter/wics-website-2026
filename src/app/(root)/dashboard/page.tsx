@@ -15,6 +15,7 @@ interface EventType {
   data: {
     name?: string;
     status?: string;
+    coverImage?: string;
     gallery?: any[];
     [key: string]: any;
   };

@@ -98,6 +98,7 @@ const Events: React.FC<CardProps> = () => {
   return (
     <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
       <div className="font-bold space-y-6">
+        <title>{event?.name || "Womxn in Computer Science"}</title>
         <h1 className="text-4xl">{event?.name || ""}</h1>
         <div className="flex flex-row gap-2 text-sm font-medium text-lightg">
           <div className="flex items-center gap-2">
@@ -139,7 +140,7 @@ const Events: React.FC<CardProps> = () => {
                       <div className="aspect-[3/4] relative">
                         <Image
                           src={event?.coverImage || ""}
-                          alt="Event Image"
+                          alt={event?.name + " image"}
                           fill
                           unoptimized
                           className="object-contain rounded-lg"
@@ -167,7 +168,7 @@ const Events: React.FC<CardProps> = () => {
                         alt={`Gallery image ${currentImageIndex + 1}`}
                         fill
                         unoptimized
-                        className="object-cover rounded-lg"
+                        className="object-contain rounded-lg"
                       />
                     </div>
 

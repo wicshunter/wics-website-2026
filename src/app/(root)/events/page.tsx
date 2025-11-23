@@ -12,8 +12,7 @@ import Link from "next/link";
 import { db } from "../../../firebase.js";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import MarkdownPreview from "../../../components/MarkdownPreview";
 export const dynamic = "force-dynamic";
 
 interface EventType {
@@ -91,7 +90,7 @@ export default function Events() {
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
               <Image
                 src={events?.[0]?.coverImage || "https://th.bing.com/th/id/OIP.2N3yUqpMYG6VHxj1maGVpAHaEo?rs=1&pid=ImgDetMain"}
-                alt="External Image"
+                alt="External Placeholder Gray Image"
                 fill
                 unoptimized
                 className="object-contain"
@@ -118,7 +117,7 @@ export default function Events() {
               </div>
             </div>
             <p className="text-sm font-medium text-lightg">
-              {events?.[0]?.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua."}
+              <MarkdownPreview content={events?.[0]?.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua."} />
             </p>
           </CardContent>
           <CardFooter>
@@ -141,7 +140,7 @@ export default function Events() {
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                     <Image
                       src={post?.coverImage || ""}
-                      alt="External Image"
+                      alt={post?.name + " cover image"}
                       fill
                       unoptimized
                       className="object-cover"
@@ -151,9 +150,7 @@ export default function Events() {
                 <CardContent>
                   <p className="font-bold">{post?.name}</p>
                   <div className="markdown-content">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {post?.description?.slice(0, 100) + "" || ""}
-                    </ReactMarkdown>
+                    <MarkdownPreview content={post?.description?.slice(0, 100) || ""} />
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -170,13 +167,13 @@ export default function Events() {
             (events?.map((post) => (
               <Card
                 key={post?.id}
-                className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl"
+                className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl flex flex-col justify-between"
               >
                 <CardHeader className="p-4">
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                     <Image
                       src={post?.coverImage || ""}
-                      alt="External Image"
+                      alt={post?.name + " cover image"}
                       fill
                       unoptimized
                       className="object-cover"
@@ -186,9 +183,7 @@ export default function Events() {
                 <CardContent>
                   <p className="font-bold">{post?.name}</p>
                   <div className="markdown-content">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {post?.description?.slice(0, 50) || ""}
-                    </ReactMarkdown>
+                    <MarkdownPreview content={post?.description?.slice(0, 100) || ""} />
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -216,7 +211,7 @@ export default function Events() {
         <div className="flex flex-col gap-4 items-center text-center space-y-4">
           <h1 className="font-bold text-2xl">Want to Host an Event?</h1>
           <p className="font-medium text-grey">
-            Have an idea for a workshop, tech talk, or any other event? We'd
+            Have an idea for a workshop, tech talk, or any other event? We would
             love to hear from you!
           </p>
           <a href="mailto:hunterwics@gmail.com">
