@@ -3,11 +3,23 @@ import { useState, useEffect } from "react";
 import ProtectedRoute from "../../../components/ProtectedRoutes";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import StatsGrid from "./components/StatsGrid";
-import DashboardHeader from "./components/DashboardHeader";
-import EventFilterTabs from "./components/EventFilterTabs";
-import EventTable from "./components/EventTable";
-import useWhitelist from "./hooks/useWhiteList";
+import { db } from "../../../firebase.js";
+import { useRouter } from "next/navigation";
+import { collection, getDocs, setDoc, doc } from "firebase/firestore";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import EventTable from "@/components/EventTable";
+
+interface EventType {
+  id: string;
+  data: {
+    name?: string;
+    status?: string;
+    coverImage?: string;
+    gallery?: any[];
+    [key: string]: any;
+  };
+}
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"all" | "published" | "drafts">("all");

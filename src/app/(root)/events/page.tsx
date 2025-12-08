@@ -10,10 +10,9 @@ import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import { db } from "../../../firebase.js";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import MarkdownPreview from "../../../components/MarkdownPreview";
 export const dynamic = "force-dynamic";
 
 interface EventType {
@@ -31,19 +30,43 @@ interface EventType {
 
 export default function Events() {
   const [events, setEvents] = useState<EventType[]>([]);
+  const [seeMore, setSeeMore] = useState(false);
 
   useEffect(() => {
     const fetchDocuments = async () => {
-      const querySnapshot = await getDocs(collection(db, "events"));
+      const eventsRef = collection(db, "events");
+      const q = query(eventsRef, orderBy("date", "desc")); 
+      const querySnapshot = await getDocs(q);
+
       const docs: EventType[] = querySnapshot.docs.map((doc) => {
         const data = doc.data() as Omit<EventType, "id">;
         return { id: doc.id, ...data };
       });
+
       setEvents(docs);
     };
 
     fetchDocuments();
   }, []);
+
+  const handleSeeMore = () => {
+    if (seeMore === true) {
+      setSeeMore(false);
+    }
+    else {
+      setSeeMore(true);
+    }
+  }
+
+  function formatTime(time: string) {
+    if (!time) return "";
+
+    const [hour, minute] = time.split(":").map(Number);
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+
+    return `${formattedHour}:${minute.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`;
+  }
 
   console.log(events);
 
@@ -66,36 +89,35 @@ export default function Events() {
           <CardHeader className="p-0">
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
               <Image
-                src="https://th.bing.com/th/id/OIP.2N3yUqpMYG6VHxj1maGVpAHaEo?rs=1&pid=ImgDetMain"
-                alt="External Image"
+                src={events?.[0]?.coverImage || "https://th.bing.com/th/id/OIP.2N3yUqpMYG6VHxj1maGVpAHaEo?rs=1&pid=ImgDetMain"}
+                alt="External Placeholder Gray Image"
                 fill
                 unoptimized
-                className="object-cover"
+                className="object-contain"
               />
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <p className="text-hotpink font-medium text-sm">Workshop</p>
-              <h2 className="text-xl">Web Development Fundamentals</h2>
+              <h2 className="text-xl">{ events?.[0]?.name || "Web Development Fundamentals"}</h2>
             </div>
             <div className="flex flex-col gap-2 text-sm font-medium text-lightg">
               <div className="flex items-center gap-2">
                 <Calendar strokeWidth={3} className="h-4 w-4 font-lg" />
-                <span>March 15, 2025</span>
+                <span>{events?.[0]?.date || "March 15, 2025"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock strokeWidth={3} className="h-4 w-4" />
-                <span>2:00 PM - 4:00 PM</span>
+                <span>{(formatTime(events?.[0]?.startTime) + (events?.[0]?.endTime && ` - ${formatTime(events?.[0]?.endTime)}`)) || "2:00 PM - 4:00 PM"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin strokeWidth={3} className="h-4 w-4" />
-                <span>W605</span>
+                <span>{events?.[0]?.location || "W605"}</span>
               </div>
             </div>
             <p className="text-sm font-medium text-lightg">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              <MarkdownPreview content={events?.[0]?.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua."} />
             </p>
           </CardContent>
           <CardFooter>
@@ -108,16 +130,17 @@ export default function Events() {
         <h1 className="font-bold text-2xl">Past Event Highlights</h1>
         <div className="grid grid-cols-3 gap-10">
           {events &&
-            events?.slice(0, 3).map((post) => (
+            !seeMore ?
+            (events?.slice(0, 3).map((post) => (
               <Card
                 key={post?.id}
-                className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl"
+                className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl flex flex-col justify-between"
               >
                 <CardHeader className="p-4">
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                     <Image
                       src={post?.coverImage || ""}
-                      alt="External Image"
+                      alt={post?.name + " cover image"}
                       fill
                       unoptimized
                       className="object-cover"
@@ -127,9 +150,40 @@ export default function Events() {
                 <CardContent>
                   <p className="font-bold">{post?.name}</p>
                   <div className="markdown-content">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {post?.description?.slice(0, 50) || ""}
-                    </ReactMarkdown>
+                    <MarkdownPreview content={post?.description?.slice(0, 100) || ""} />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Link
+                    href={`/events/${post?.id}`}
+                    className="bg-white font-semibold rounded-lg w-full border border-1 p-2 text-center"
+                  >
+                    <button className="">View Recap</button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            )))
+            :
+            (events?.map((post) => (
+              <Card
+                key={post?.id}
+                className="bg-white/50 drop-shadow-[0px_0px_10.4px_#db277780] border-none p-0 rounded-xl flex flex-col justify-between"
+              >
+                <CardHeader className="p-4">
+                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
+                    <Image
+                      src={post?.coverImage || ""}
+                      alt={post?.name + " cover image"}
+                      fill
+                      unoptimized
+                      className="object-cover"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="font-bold">{post?.name}</p>
+                  <div className="markdown-content">
+                    <MarkdownPreview content={post?.description?.slice(0, 100) || ""} />
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -141,11 +195,14 @@ export default function Events() {
                   </Link>
                 </CardFooter>
               </Card>
-            ))}
+            )))
+          }
         </div>
         <div className="flex flex-col items-center">
-          <button className="bg-buttonGradient font-semibold rounded-lg p-2 pl-5 pr-5 text-grey mt-[2%]">
-            See More
+          <button className="bg-buttonGradient font-semibold rounded-lg p-2 pl-5 pr-5 text-grey mt-[2%]"
+            onClick={handleSeeMore}
+          >
+            {!seeMore ? "See More": "See Less"}
           </button>
         </div>
       </div>
@@ -154,7 +211,7 @@ export default function Events() {
         <div className="flex flex-col gap-4 items-center text-center space-y-4">
           <h1 className="font-bold text-2xl">Want to Host an Event?</h1>
           <p className="font-medium text-grey">
-            Have an idea for a workshop, tech talk, or any other event? We’d
+            Have an idea for a workshop, tech talk, or any other event? We would
             love to hear from you!
           </p>
           <a href="mailto:hunterwics@gmail.com">

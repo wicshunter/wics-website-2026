@@ -162,8 +162,13 @@ export default function Page() {
         form
       );
 
-      console.log("URL: ", res.data.secure_url);
-      return res.data.secure_url;
+      const url = res.data.secure_url.replace(
+        "/upload/",
+        "/upload/f_auto,q_auto,w_1600/"
+      );
+
+      return url;
+
     } catch (error: any) {
       console.error("ERROR: ", error.response?.data || error);
       return null;

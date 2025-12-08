@@ -8,12 +8,15 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../src/firebase.js";
+import { extractPublicId } from 'cloudinary-build-url';
+import axios from 'axios';
 
 interface EventType {
   id: string;
   data: {
     name?: string;
     status?: string;
+    coverImage?: string;
     gallery?: any[];
     [key: string]: any;
   };
@@ -47,17 +50,40 @@ export default function EventTable({ events }: EventTableProps) {
   };
 
   const handleDelete = async () => {
-    if (selectedEventId != null){
-      try{
-        await deleteDoc(doc(db, "events", selectedEventId));
-        setAnchorEl(null);
-        router.refresh();
-      }
-      catch (err: any){
-        console.log("Cant delete: ", err);
-      }
+  if (!selectedEventId) return;
+
+  try {
+    const event = events.find(value => value.id === selectedEventId);
+
+    let publicIds: string[] = [];
+
+    if (event?.data.coverImage) {
+      publicIds.push(extractPublicId(event.data.coverImage));
     }
+
+    if (event?.data.gallery) {
+      event.data.gallery.forEach(img => {
+        publicIds.push(extractPublicId(img));
+      });
+    }
+
+    console.log("Deleting Cloudinary IDs:", publicIds);
+
+    await fetch("/api/delete-cloudinary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ publicIds }),
+    });
+
+    await deleteDoc(doc(db, "events", selectedEventId));
+    setAnchorEl(null);
+    router.refresh();
+
+  } catch (err) {
+    console.error("Delete failed:", err);
   }
+};
+
 
   console.log(events);
 
