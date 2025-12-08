@@ -1,12 +1,13 @@
 "use client";
+
 import { FormEvent, useState, useEffect } from "react";
 import {
   signInWithEmailAndPassword,
+  signOut,
   onAuthStateChanged,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth } from "../../../firebase"; 
-import { Button } from "@/components/ui/button";
+import { auth } from "../../../firebase";
 import LoginForm from "./LoginForm";
 import LoggedInMessage from "./LoggedInMessage";
 
@@ -26,6 +27,7 @@ export default function Login() {
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -37,23 +39,36 @@ export default function Login() {
 
       if (currentUser && currentUser.emailVerified) {
         router.push("/dashboard");
-        console.log("Success", currentUser);
       } else {
-        console.log(currentUser, "Not verified");
+        setError("Please verify your email before logging in.");
       }
-    } catch (error) {
+    } catch (err) {
       setError("Invalid email or password");
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut(auth);
+    setCurrentUser(null);
+  };
+
+  const goToDashboard = () => {
+    router.push("/dashboard");
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center font-inter px-4">
-      <div className="w-full max-w-md space-y-6">
-        <h2 className="font-bold text-2xl text-center">Admin Login</h2>
-        {currentUser && (
-          <LoggedInMessage currentUser={currentUser} auth={auth} setCurrentUser={setCurrentUser} />
-        )}
-        {!currentUser && (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      {currentUser ? (
+        <div className="flex flex-col items-center gap-4">
+          <LoggedInMessage
+            currentUser={currentUser}
+            auth={auth}
+            setCurrentUser={setCurrentUser}
+            goToDashboard={goToDashboard}
+          />
+        </div>
+      ) : (
+        <div className="flex flex-col items-center gap-4">
           <LoginForm
             email={email}
             password={password}
@@ -63,8 +78,8 @@ export default function Login() {
             error={error}
             router={router}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

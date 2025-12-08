@@ -42,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[10%]">
+    <div className="flex flex-col items-center justify-center font-inter ml-[10%] mr-[10%] mt-[5%] mb-[10%]">
       <h2 className="font-bold text-2xl">Admin Sign Up</h2>
       <SignUpForm
         email={email}
