@@ -104,7 +104,7 @@ export default function Navbar() {
   }, [user]);
 
   return (
-    <header className="text-pink py-4 shadow-[0px_6px_13.3px_rgba(0,0,0,0.25)] relative rounded-full mt-[2%] mx-auto font-inter font-semibold w-fit pl-8 pr-8">
+    <header className="text-pink py-4 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8] shadow-[0px_6px_13.3px_rgba(0,0,0,0.25)] relative rounded-full mt-[2%] mx-auto font-inter font-semibold w-fit pl-8 pr-8">
       <div className="container flex justify-center items-center">
         {/* Desktop navigation */}
         <div className="hidden md:flex md:flex-row items-center text-grey">

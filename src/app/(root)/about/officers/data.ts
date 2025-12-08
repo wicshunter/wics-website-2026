@@ -11,108 +11,114 @@ const faculty = [
 ];
 
 const eboard = [
-    {
-        title: "Ynalois Pangilinan",
-        description: "President",
-        major: "Computer Science",
-        imageUrl: "/images/officers/ynalois-pangilinan2.jpg",
-        linkedin: "https://www.linkedin.com/in/ynalois-pangilinan",
-        github: "https://github.com/ynaloisp/",
-        email: "ynaloispangilinan@gmail.com",
-    },
-    {
-        title: "Makiya Laurenza",
-        description: "Vice President",
-        major: "Computer Science",
-        imageUrl: "/images/officers/makiya-l.jpg",
-        linkedin: "https://www.linkedin.com/in/makiya-laurenza/",
-        github: "https://github.com/makiya32",
-        email: "makiyalaurenza1@gmail.com",
-    },
-    {
-        title: "Lena Ngo",
-        description: "Secretary",
-        major: "Computer Science",
-        imageUrl: "/images/officers/Lena-ngo.jpeg",
-        linkedin: "https://www.linkedin.com/in/lena-ngo-08098b259/",
-        github: "",
-        email: "lenango14@gmail.com",
-    },
-    {
-        title: "Monae White",
-        description: "Treasurer",
-        major: "Computer Science",
-        imageUrl: "/images/officers/Monae-White.jpg",
-        linkedin: "https://www.linkedin.com/in/monae-white",
-        github: "",
-        email: "monae.white78@myhunter.cuny.edu",
-    },
+  {
+    title: "Ynalois Pangilinan",
+    description: "President",
+    major: "Computer Science",
+    imageUrl: "/images/officers/ynalois-pangilinan2.jpg",
+    linkedin: "https://www.linkedin.com/in/ynalois-pangilinan",
+    github: "",
+    email: "ynaloispangilinan@gmail.com",
+  },
+  {
+    title: "Makiya Laurenza",
+    description: "Vice President",
+    major: "Computer Science",
+    imageUrl: "/images/officers/makiya-l.jpg",
+    linkedin: "https://www.linkedin.com/in/makiya-laurenza/",
+    github: "",
+    email: "makiyalaurenza1@gmail.com",
+  },
+  {
+    title: "Lena Ngo",
+    description: "Secretary",
+    major: "Computer Science",
+    imageUrl: "/images/officers/lena-ngo.jpeg",
+    linkedin: "https://www.linkedin.com/in/lena-ngo-08098b259/",
+    github: "",
+    email: "lenango14@gmail.com",
+  },
+  {
+    title: "Monae White",
+    description: "Treasurer",
+    major: "Computer Science",
+    imageUrl: "/images/officers/Monae-White.jpg",
+    linkedin: "https://www.linkedin.com/in/monae-white",
+    github: "",
+    email: "monae.white78@myhunter.cuny.edu",
+  },
 ];
 
-const team = [
-    {
-        title: "Kripamoye Biswas",
-        description: "Social Media Manager",
-        major: "Computer Science & Math Major",
-        imageUrl: "/images/officers/Kripamoye-Biswas.png",
-        linkedin: "https://www.linkedin.com/in/kripamoyebiswas",
-        github: "",
-        email: "biswaskripamoye@gmail.com",
-    },
-    {
-        title: "Angela Zhang",
-        description: "Social Media Manager",
-        major: "Computer Science",
-        imageUrl: "/images/officers/angela-z.jpeg",
-        linkedin: "",
-        github: "",
-        email: "hunterwics@gmail.com",
-    },
-    {
-        title: "Sanjida Fairuse",
-        description: "Community Officer",
-        major: "Computer Science",
-        imageUrl: "/images/officers/sanjida-f.jpeg",
-        linkedin: "https://www.linkedin.com/in/sanjida-f",
-        github: "https://github.com/sanjidafairuse",
-        email: "sanjida.fairuse58@myhunter.cuny.edu",
-    },
-    {
-        title: "Keoma Blake",
-        description: "Community Officer",
-        major: "Computer Science",
-        imageUrl: "/images/officers/keoma-blake.jpeg",
-        linkedin: "",
-        github: "",
-        email: "hunterwics@gmail.com",
-    },
-    {
-        title: "Michelle Rivera Perez",
-        description: "Social Media Manager",
-        major: "Computer Science",
-        imageUrl: "/images/officers/michelle-r.jpg",
-        linkedin: "https://www.linkedin.com/in/michelle-rivera-043877223/",
-        github: "https://github.com/michelleriveraperez",
-        email: "mriveraperez177@gmail.com",
-    },
-    {
-        title: "Riya",
-        description: "Graphic Designer",
-        major: "Computer Science",
-        imageUrl: "/images/officers/abakariyyah-ahmed.JPG",
-        linkedin: "",
-        github: "",
-        email: "hunterwics@gmail.com",
-    },
-    {
-        title: "Yaritza Yanez",
-        description: "Graphic Designer",
-        major: "Computer Science",
-        imageUrl: "/images/officers/yaritza-yanez.jpeg",
-        linkedin: "",
-        github: "",
-        email: "hunterwics@gmail.com",
-    },
+const communityOfficer = [
+  {
+    title: "Sanjida Fairuse",
+    description: "Community Officer",
+    major: "Computer Science",
+    imageUrl: "/images/officers/sanjida-f.jpeg",
+    linkedin: "https://www.linkedin.com/in/sanjida-f",
+    github: "",
+    email: "sanjida.fairuse58@myhunter.cuny.edu",
+  },
+  {
+    title: "Keoma Blake",
+    description: "Community Officer",
+    major: "Computer Science",
+    imageUrl: "/images/officers/keoma-blake.jpeg",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
+];
+
+const graphicDesigner = [
+  {
+    title: "Riya",
+    description: "Graphic Designer",
+    major: "Computer Science",
+    imageUrl: "/images/officers/abakariyyah-ahmed.JPG",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
+  {
+    title: "Yaritza Yanez",
+    description: "Graphic Designer",
+    major: "Computer Science",
+    imageUrl: "/images/officers/yaritza-yanez.jpeg",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
+];
+
+const socialMediaManager = [
+  {
+    title: "Michelle Rivera Perez",
+    description: "Social Media Manager",
+    major: "Computer Science",
+    imageUrl: "/images/officers/michelle-r.jpg",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
+  {
+    title: "Kripamoye Biswas",
+    description: "Social Media Manager",
+    major: "Computer Science & Math Major",
+    imageUrl: "/images/officers/Kripamoye-Biswas.png",
+    linkedin: "https://www.linkedin.com/in/kripamoyebiswas",
+    github: "",
+    email: "biswaskripamoye@gmail.com",
+  },
+  {
+    title: "Angela Zhang",
+    description: "Social Media Manager",
+    major: "Computer Science",
+    imageUrl: "/images/officers/angela-z.jpeg",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
 ];
 
 const webMaster = [
@@ -184,4 +190,4 @@ const workshop = [
     },
 ];
 
-export { faculty, eboard, team, webMaster, workshop };
+export { faculty, eboard, communityOfficer, graphicDesigner, socialMediaManager, webMaster, workshop };
