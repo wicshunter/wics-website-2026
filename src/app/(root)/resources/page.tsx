@@ -241,15 +241,15 @@ export default function Resources() {
                             <p className="font-semibold text-lg">
                                 Girls Who Code
                             </p>
-                            <a className="text-hotpink text-sm">
-                                Visit Website
+                            <a href="https://girlswhocode.com" target="_blank" rel="noopener noreferrer" className="text-hotpink text-sm">
+                                 Visit Website
                             </a>
                         </CardHeader>
                     </Card>
                     <Card className="space-y-0 pb-0">
                         <CardHeader>
                             <p className="font-semibold text-lg">Codeacademy</p>
-                            <a className="text-hotpink text-sm">
+                            <a href="https://www.codecademy.com" target="_blank" rel="noopener noreferrer" className="text-hotpink text-sm">
                                 Visit Website
                             </a>
                         </CardHeader>
@@ -257,7 +257,7 @@ export default function Resources() {
                     <Card className="space-y-0 pb-0">
                         <CardHeader>
                             <p className="font-semibold text-lg">Wecode</p>
-                            <a className="text-hotpink text-sm">
+                            <a href="https://wecodeharvard.com/" target="_blank" rel="noopener noreferrer" className="text-hotpink text-sm">
                                 Visit Website
                             </a>
                         </CardHeader>
