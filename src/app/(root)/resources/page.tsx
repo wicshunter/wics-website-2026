@@ -43,7 +43,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://www.freecodecamp.org/" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
@@ -64,7 +64,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://www.theodinproject.com/paths/foundations/courses/foundations" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
@@ -85,7 +85,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
@@ -106,7 +106,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
@@ -130,7 +130,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://resume.co/?afid=msuss&utm_source=microsoft&utm_medium=cpc&utm_campaign=688854886&utm_term=best%20tech%20resume%20guides&msclkid=f86f971a2c65158a72bbfeb1947bf9f6" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
@@ -151,7 +151,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://www.techinterviewhandbook.org/" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
@@ -172,7 +172,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://www.linkedin.com/jobs/internship-jobs/" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
@@ -193,7 +193,7 @@ export default function Resources() {
                                             </span>
                                         </div>
                                         <div>
-                                            <a className="text-[#EC4899] text-sm font-semibold">
+                                            <a href="https://www.startus-insights.com/innovators-guide/technology-industry-insights/" target="_blank" rel="noopener noreferrer" className="text-[#EC4899] text-sm font-semibold">
                                                 Learn More
                                             </a>
                                         </div>
