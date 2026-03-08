@@ -72,15 +72,6 @@ const communityOfficer = [
 
 const graphicDesigner = [
   {
-    title: "Riya",
-    description: "Graphic Designer",
-    major: "Computer Science",
-    imageUrl: "/images/officers/abakariyyah-ahmed.JPG",
-    linkedin: "",
-    github: "",
-    email: "hunterwics@gmail.com",
-  },
-  {
     title: "Yaritza Yanez",
     description: "Graphic Designer",
     major: "Computer Science",
@@ -119,27 +110,21 @@ const socialMediaManager = [
     github: "",
     email: "hunterwics@gmail.com",
   },
+  {
+    title: "Angeli Pante",
+    description: "Social Media Manager",
+    major: "Computer Science",
+    imageUrl: "/images/officers/angeli-pante.jpeg",
+    linkedin: "",
+    github: "",
+    email: "hunterwics@gmail.com",
+  },
+
+        
+
 ];
 
 const webMaster = [
-    {
-        title: "Selina Zheng",
-        description: "Web Master",
-        major: "Computer Science and Chinese",
-        imageUrl: "/images/officers/selina-z.jpeg",
-        linkedin: "linkedin.com/in/selina-zheng/",
-        github: "https://github.com/SelinaZheng-LX",
-        email: "selina.zheng23@myhunter.cuny.edu",
-    },
-    {
-        title: "Anita Prova",
-        description: "Web Master",
-        major: "Computer Science",
-        imageUrl: "/images/officers/anita-p.jpg",
-        linkedin: "https://www.linkedin.com/in/anita-prova-950322245/",
-        github: "https://github.com/anitaprova",
-        email: "anita.prova49@myhunter.cuny.edu",
-    },
     {
         title: "Vincent Zhong",
         description: "Web Master",
@@ -149,18 +134,38 @@ const webMaster = [
         github: "",
         email: "hunterwics@gmail.com",
     },
+    {
+        title: "Alexandra Rahman",
+        description: "Web Master",
+        major: "Computer Science and Economics",
+        imageUrl: "/images/officers/alexandra-rahman.PNG",
+        linkedin: "",
+        github : "",
+        email: "alexandra.rahman82@myhunter.cuny.edu",
+    },
+    {
+        title: "Jasmine Khan",
+        description: "Web Master",
+        major: "Computer Science",
+        imageUrl: "/images/officers/jasmine-khan.jpeg",
+        linkedin:"",
+        github:"",
+        email: "hunterwics@gmail.com",
+    },
+    {
+        title: "Jin Wang",
+        description: "Web Master",
+        major: "Computer Science",
+        imageUrl: "/images/officers/jin-wang.png",
+        linkedin:"",
+        github:"",
+        email: "hunterwics@gmail.com",
+    },
+        
+        
 ];
 
 const workshop = [
-    {
-        title: "Sy'rai Pierre",
-        description: "Tech Workshop Coordinator",
-        major: "Computer Science",
-        imageUrl: "/images/officers/syrai-pierre.png",
-        linkedin: "https://www.linkedin.com/in/syrai-pierre/",
-        github: "",
-        email: "Syraip4@gmail.com",
-    },
     {
         title: "Marie Cari",
         description: "Tech Workshop Coordinator",
