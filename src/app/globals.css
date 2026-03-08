@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: linear-gradient(90deg, rgba(253,242,248,1) 20%, rgba(255,255,255,1) 47%, rgba(253,242,248,1) 76%);
@@ -60,3 +61,85 @@
   }
 }
 
+/* Change markdown styling here */
+.markdown-content{
+  font-family: "Inter", sans-serif;
+}
+
+.markdown-content h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.markdown-content h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.markdown-content h3 {
+  font-size: 1.1rem;
+  font-weight: 550;
+}
+
+.markdown-content p {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 1rem; 
+}
+
+.markdown-content ul {
+  list-style-type: circle;
+  font-weight: 400;
+  padding-left: 2rem;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+  font-weight: 400;
+  padding-left: 2rem;
+}
+
+.markdown-content a {
+  color: blue;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid pink;
+  font-weight: 400;
+  padding-left: 1rem;
+  color: #666;
+}
+
+.markdown-content code {
+  font-weight: 400;
+}
+
+.markdown-content table {
+  font-weight: 400;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    background: var(--background);
+    background-attachment: fixed;
+    background-size: cover; 
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base{
+  input{
+    @apply bg-gray-50 border rounded-sm p-1;
+  }
+}
+
+@layer base{
+  label{
+    @apply font-inter;
+  }
+}

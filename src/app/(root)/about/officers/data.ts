@@ -1,13 +1,13 @@
 const faculty = [
-  {
-    title: "Sarah Ita Levitan",
-    description: "Faculty Advisor",
-    major: "Assistant Professor of Computer Science",
-    imageUrl: "/images/officers/Sarah-Levitan.jpg",
-    linkedin: "https://www.linkedin.com/in/sarah-ita-levitan-7b1b3b1b/",
-    github: "",
-    email: "hunterwics@gmail.com",
-  },
+    {
+        title: "Sarah Ita Levitan",
+        description: "Faculty Advisor",
+        major: "Assistant Professor of Computer Science",
+        imageUrl: "/images/officers/Sarah-Levitan.jpg",
+        linkedin: "https://www.linkedin.com/in/sarah-ita-levitan-7b1b3b1b/",
+        github: "",
+        email: "hunterwics@gmail.com",
+    },
 ];
 
 const eboard = [
@@ -122,72 +122,72 @@ const socialMediaManager = [
 ];
 
 const webMaster = [
-  {
-    title: "Selina Zheng",
-    description: "Web Master",
-    major: "Computer Science and Chinese",
-    imageUrl: "/images/officers/selina-z.jpeg",
-    linkedin: "",
-    github: "https://github.com/SelinaZheng-LX",
-    email: "hunterwics@gmail.com",
-  },
-  {
-    title: "Anita Prova",
-    description: "Web Master",
-    major: "Computer Science",
-    imageUrl: "/images/officers/anita-p.jpg",
-    linkedin: "https://www.linkedin.com/in/anita-prova-950322245/",
-    github: "https://github.com/anitaprova",
-    email: "anita.prova49@myhunter.cuny.edu",
-  },
-  {
-    title: "Vincent Zhong",
-    description: "Web Master",
-    major: "Computer Science and Chinese",
-    imageUrl: "/images/officers/icon-virtual.png",
-    linkedin: "",
-    github: "",
-    email: "hunterwics@gmail.com",
-  },
+    {
+        title: "Selina Zheng",
+        description: "Web Master",
+        major: "Computer Science and Chinese",
+        imageUrl: "/images/officers/selina-z.jpeg",
+        linkedin: "linkedin.com/in/selina-zheng/",
+        github: "https://github.com/SelinaZheng-LX",
+        email: "selina.zheng23@myhunter.cuny.edu",
+    },
+    {
+        title: "Anita Prova",
+        description: "Web Master",
+        major: "Computer Science",
+        imageUrl: "/images/officers/anita-p.jpg",
+        linkedin: "https://www.linkedin.com/in/anita-prova-950322245/",
+        github: "https://github.com/anitaprova",
+        email: "anita.prova49@myhunter.cuny.edu",
+    },
+    {
+        title: "Vincent Zhong",
+        description: "Web Master",
+        major: "Computer Science and Chinese",
+        imageUrl: "/images/officers/icon-virtual.png",
+        linkedin: "",
+        github: "",
+        email: "hunterwics@gmail.com",
+    },
 ];
 
 const workshop = [
-  {
-    title: "Sy'rai Pierre",
-    description: "Tech Workshop Coordinator",
-    major: "Computer Science",
-    imageUrl: "/images/officers/syrai-pierre.png",
-    linkedin: "",
-    github: "",
-    email: "hunterwics@gmail.com",
-  },
-  {
-    title: "Marie Cari",
-    description: "Tech Workshop Coordinator",
-    major: "Computer Science & Math Major",
-    imageUrl: "/images/officers/marie-c.jpg",
-    linkedin: "",
-    github: "",
-    email: "hunterwics@gmail.com",
-  },
-  {
-    title: "Linh Le",
-    description: "Tech Workshop Coordinator",
-    major: "Computer Science",
-    imageUrl: "/images/officers/linh-le.jpeg",
-    linkedin: "",
-    github: "",
-    email: "hunterwics@gmail.com",
-  },
-  {
-    title: "Allison Lee",
-    description: "Tech Workshop Coordinator",
-    major: "Computer Science",
-    imageUrl: "/images/officers/allison-lee.jpg",
-    linkedin: "https://www.linkedin.com/in/allis0nlee",
-    github: "",
-    email: "esera.lee093@gmail.com",
-  },
+    {
+        title: "Sy'rai Pierre",
+        description: "Tech Workshop Coordinator",
+        major: "Computer Science",
+        imageUrl: "/images/officers/syrai-pierre.png",
+        linkedin: "https://www.linkedin.com/in/syrai-pierre/",
+        github: "",
+        email: "Syraip4@gmail.com",
+    },
+    {
+        title: "Marie Cari",
+        description: "Tech Workshop Coordinator",
+        major: "Computer Science & Math Major",
+        imageUrl: "/images/officers/marie-c.jpg",
+        linkedin: "https://www.linkedin.com/in/marie-cari/",
+        github: "https://github.com/mariecarii",
+        email: "Mariecari203@gmail.com",
+    },
+    {
+        title: "Linh Le",
+        description: "Tech Workshop Coordinator",
+        major: "Computer Science",
+        imageUrl: "/images/officers/linh-le.jpeg",
+        linkedin: "",
+        github: "",
+        email: "hunterwics@gmail.com",
+    },
+    {
+        title: "Allison Lee",
+        description: "Tech Workshop Coordinator",
+        major: "Computer Science",
+        imageUrl: "/images/officers/allison-lee.jpg",
+        linkedin: "https://www.linkedin.com/in/allis0nlee",
+        github: "",
+        email: "esera.lee093@gmail.com",
+    },
 ];
 
 export { faculty, eboard, communityOfficer, graphicDesigner, socialMediaManager, webMaster, workshop };

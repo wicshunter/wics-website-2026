@@ -1,8 +1,7 @@
 "use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Calendar,
   Clock,
@@ -14,25 +13,64 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { blogPosts } from "./test";
 import { useParams } from "next/navigation";
-
-const imageList = [
-  "/images/officers/Sarah-Levitan.jpg",
-  "/images/event/Behavioral-Interview-Prep.png",
-  "/images/event/BTT-Info-Session.png",
-  "/images/event/cookie-decorating-team.jpg",
-  "/images/event/cookie-decorating-team.jpg",
-];
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../../../../firebase.js";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface CardProps {}
 
 const Events: React.FC<CardProps> = () => {
   const router = useRouter();
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [event, setEvent] = useState({
+    name: "",
+    date: "",
+    startTime: "",
+    endTime: "",
+    location: "",
+    description: "",
+    coverImage: "",
+    gallery: [""],
+    status: "",
+  });
+  const [imageList, setImageList] = useState([""]);
 
-  console.log("Slug:", slug);
+  useEffect(() => {
+    const fetchDocument = async () => {
+      try {
+        const docRef = doc(db, "events", slug);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          let temp = {
+            name: docSnap.data().name || "",
+            date: docSnap.data().date || "",
+            startTime: docSnap.data().startTime || "",
+            endTime: docSnap.data().endTime || "",
+            location: docSnap.data().location || "",
+            description: docSnap.data().description || "",
+            coverImage: docSnap.data().coverImage || "",
+            gallery: docSnap.data().gallery || [""],
+            status: docSnap.data().status || "",
+          };
+
+          setEvent(temp);
+          setImageList(docSnap.data().gallery || [""]);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchDocument();
+  }, []);
+  console.log("Events: ", event);
+
   const post = blogPosts.find((post) => post.slug === slug);
-
   const id = post ? blogPosts.indexOf(post) : 1;
 
   const goToNextImage = () => {
@@ -47,22 +85,35 @@ const Events: React.FC<CardProps> = () => {
     );
   };
 
+  function formatTime(time: string) {
+    if (!time) return "";
+
+    const [hour, minute] = time.split(":").map(Number);
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+
+    return `${formattedHour}:${minute.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`;
+  }
+
   return (
     <div className="font-inter ml-[10%] mr-[10%] mt-[5%] mb-[13%] space-y-16 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8]">
       <div className="font-bold space-y-6">
-        <h1 className="text-4xl">{blogPosts[id].title}</h1>
+        <title>{event?.name || "Womxn in Computer Science"}</title>
+        <h1 className="text-4xl">{event?.name || ""}</h1>
         <div className="flex flex-row gap-2 text-sm font-medium text-lightg">
           <div className="flex items-center gap-2">
             <Calendar strokeWidth={3} className="h-4 w-4 font-lg" />
-            <span>{blogPosts[id].date}</span>
+            <span>{event?.date || ""}</span>
           </div>
           <div className="flex items-center gap-2">
             <Clock strokeWidth={3} className="h-4 w-4" />
-            <span>{blogPosts[id].time}</span>
+            <span>
+              {formatTime(event?.startTime)}{event?.endTime && ` - ${formatTime(event.endTime)}`}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <MapPin strokeWidth={3} className="h-4 w-4" />
-            <span>{blogPosts[id].location}</span>
+            <span>{event?.location || ""}</span>
           </div>
         </div>
         <Tabs defaultValue="highlights" className="w-full">
@@ -73,27 +124,14 @@ const Events: React.FC<CardProps> = () => {
           <TabsContent value="highlights" className="space-y-4">
             <Card className="space-y-3 border border-gray-300">
               <CardContent className="space-y-4 pt-4">
-                <div className="flex flex-col md:flex-row gap-8 w-full items-center justify-center p-4">
+                <div className="flex flex-col md:flex-row gap-8 w-full p-4">
                   {/* Content section */}
-                  <div className="flex flex-col items-left gap-4 w-full md:w-[55%] order-1 md:order-1">
-                    <h2 className="text-2xl">Event Highlights</h2>
-                    <p className="font-medium text-sm">
-                      {blogPosts[id].content}
-                    </p>
-                    <h2 className="text-xl">Key Takeaways</h2>
-                    <ul className="list-disc pl-5 space-y-2 font-medium text-sm">
-                      <li>
-                        Networking opportunities with industry professionals
-                      </li>
-                      <li>Insights into the latest technology trends</li>
-                      <li>Hands-on workshops and interactive sessions</li>
-                    </ul>
-                    <h2 className="text-xl">Speakers</h2>
-                    <ul className="list-disc pl-5 space-y-2 font-medium text-sm">
-                      {blogPosts[id].speakers.map((speaker, index) => (
-                        <li key={index}>{speaker}</li>
-                      ))}
-                    </ul>
+                  <div className="flex flex-col items-left gap-4 w-full md:w-[55%] order-1 md:order-1 mt-10">
+                    <div className="markdown-content">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {event?.description || ""}
+                      </ReactMarkdown>
+                    </div>
                   </div>
 
                   {/* Image section */}
@@ -101,8 +139,8 @@ const Events: React.FC<CardProps> = () => {
                     <div className="relative w-full max-w-md overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                       <div className="aspect-[3/4] relative">
                         <Image
-                          src={blogPosts[id].coverImage}
-                          alt="Event Image"
+                          src={event?.coverImage || ""}
+                          alt={event?.name + " image"}
                           fill
                           unoptimized
                           className="object-contain rounded-lg"
@@ -126,11 +164,11 @@ const Events: React.FC<CardProps> = () => {
                   <div className="relative w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto">
                     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-[0px_0px_10px_#db277760]">
                       <Image
-                        src={imageList[currentImageIndex]}
+                        src={imageList[currentImageIndex] || ""}
                         alt={`Gallery image ${currentImageIndex + 1}`}
                         fill
                         unoptimized
-                        className="object-cover rounded-lg"
+                        className="object-contain rounded-lg"
                       />
                     </div>
 
