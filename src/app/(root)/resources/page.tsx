@@ -257,7 +257,7 @@ export default function Resources() {
                     <Card className="space-y-0 pb-0">
                         <CardHeader>
                             <p className="font-semibold text-lg">Wecode</p>
-                            <a href="https://wecodeharvard.com/" target="_blank" rel="noopener noreferrer" className="text-hotpink text-sm">
+                            <a href="https://www.wecodeconference.com/" target="_blank" rel="noopener noreferrer" className="text-hotpink text-sm">
                                 Visit Website
                             </a>
                         </CardHeader>
