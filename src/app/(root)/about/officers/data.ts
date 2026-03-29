@@ -128,7 +128,7 @@ const webMaster = [
     {
         title: "Vincent Zhong",
         description: "Web Master",
-        major: "Computer Science and Chinese",
+        major: "Computer Science and Mathematics",
         imageUrl: "/images/officers/icon-virtual.png",
         linkedin: "",
         github: "",
