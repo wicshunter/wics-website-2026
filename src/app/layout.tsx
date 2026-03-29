@@ -11,8 +11,20 @@ import { AuthProvider } from "../context/AuthContenxt";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Womxn in Computer Science",
-  description: "Hunter College WiCS Club",
+  title: "WiCS Hunter College | Women in Computer Science",
+  description: "Women in Computer Science (WiCS) at Hunter College, CUNY. Join our community for workshops, networking events, and resources for women and non-binary people in tech.",
+  keywords: "WiCS, Hunter College, Women in Computer Science, Hunter WiCS, CUNY, women in tech, computer science club",
+  verification: {
+    google: "zwz7fl44YuhUk9vZodGIB6sxBY5YGy8HjT_ZiUFtmU8",
+  },
+  openGraph: {
+    title: "WiCS Hunter College | Women in Computer Science",
+    description: "Women in Computer Science (WiCS) at Hunter College, CUNY. Join our community for workshops, networking events, and resources for women and non-binary people in tech.",
+    url: "https://hunterwics.com",
+    siteName: "Hunter WiCS",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
