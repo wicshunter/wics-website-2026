@@ -1,109 +1,163 @@
 "use client";
-import { useState, useEffect } from "react";
-import { collection, getDocs, doc, setDoc } from "@firebase/firestore";
+
+import { useEffect, useState } from "react";
+import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase";
 
-interface User {
+type EventItem = {
   id: string;
-  email: string;
-  emplid: string;
-  fullname: string;
-  points: number;
-}
+  title: string;
+  description: string;
+  date: string;
+  imageUrl?: string;
+  imagePublicId?: string;
+};
 
 export default function AdminPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [editingPoints, setEditingPoints] = useState<{ [key: string]: number }>(
-    {}
-  );
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const fetchEvents = async () => {
+    setLoading(true);
+    try {
+      const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
+      const snap = await getDocs(q);
+      const rows: EventItem[] = snap.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as Omit<EventItem, "id">),
+      }));
+      setEvents(rows);
+    } catch {
+      setMessage("Failed to load events.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function fetchUsers() {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      const fetchedUsers: User[] = [];
-
-      querySnapshot.forEach((doc) => {
-        const userData = doc.data();
-        fetchedUsers.push({
-          id: doc.id,
-          email: userData.email,
-          emplid: userData.emplid,
-          fullname: userData.fullname,
-          points: userData.points || 0,
-        });
-      });
-
-      setUsers(fetchedUsers);
-    }
-
-    fetchUsers();
+    fetchEvents();
   }, []);
 
-  const handlePointsChange = (userId: string, points: number) => {
-    setEditingPoints((prev) => ({ ...prev, [userId]: points }));
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage("");
+    setSubmitting(true);
 
-  const savePoints = async (userId: string) => {
-    const points = editingPoints[userId];
-    const userDocRef = doc(db, "users", userId);
-    await setDoc(userDocRef, { points }, { merge: true });
-    setUsers((prev) =>
-      prev.map((user) => (user.id === userId ? { ...user, points } : user))
-    );
-    console.log("Points updated successfully");
-  };
+    try {
+      let imageUrl = "";
+      let imagePublicId = "";
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.emplid.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.fullname.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      if (imageFile) {
+        const fd = new FormData();
+        fd.append("file", imageFile);
+
+        const uploadRes = await fetch("/api/cloudinary/upload", {
+          method: "POST",
+          body: fd,
+        });
+
+        const uploadJson = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error(uploadJson.error || "Image upload failed");
+
+        imageUrl = uploadJson.url;
+        imagePublicId = uploadJson.publicId;
+      }
+
+      await addDoc(collection(db, "events"), {
+        title,
+        description,
+        date,
+        imageUrl,
+        imagePublicId,
+        createdAt: serverTimestamp(),
+      });
+
+      setTitle("");
+      setDescription("");
+      setDate("");
+      setImageFile(null);
+      setMessage("Event created.");
+      fetchEvents();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to create event.";
+      setMessage(msg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
-    <div className="bg-[#fef8f8] min-h-screen p-8">
-      <h1 className="text-3xl font-bold mb-6">Club Members</h1>
-      <input
-        type="text"
-        placeholder="Search by EMPLID or Name"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="mb-6 p-2 border border-gray-300 rounded"
-      />
-      {filteredUsers && filteredUsers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredUsers.map((user) => (
-            <div key={user.id} className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-2">{user.fullname}</h2>
-              <p className="text-gray-700 mb-1">
-                <strong>Email:</strong> {user.email}
-              </p>
-              <p className="text-gray-700 mb-1">
-                <strong>EMPLID:</strong> {user.emplid}
-              </p>
-              <p className="text-gray-700 mb-1">
-                <strong>Points:</strong> {user.points}
-              </p>
-              <input
-                type="number"
-                value={editingPoints[user.id] ?? user.points}
-                onChange={(e) =>
-                  handlePointsChange(user.id, parseInt(e.target.value))
-                }
-                className="mb-2 p-2 border border-gray-300 rounded"
-              />
-              <button
-                onClick={() => savePoints(user.id)}
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-              >
-                Save Points
-              </button>
-            </div>
+    <main className="mx-auto max-w-5xl p-6">
+      <h1 className="mb-4 text-2xl font-bold">Admin Dashboard</h1>
+
+      <form onSubmit={handleSubmit} className="mb-8 space-y-3 rounded border p-4">
+        <input
+          className="w-full rounded border p-2"
+          placeholder="Event title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <textarea
+          className="w-full rounded border p-2"
+          placeholder="Event description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={4}
+          required
+        />
+        <input
+          type="date"
+          className="w-full rounded border p-2"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
+        <input
+          type="file"
+          accept="image/*"
+          className="w-full rounded border p-2"
+          onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+        />
+        <button
+          type="submit"
+          disabled={submitting}
+          className="rounded bg-black px-4 py-2 text-white disabled:opacity-60"
+        >
+          {submitting ? "Creating..." : "Create Event"}
+        </button>
+      </form>
+
+      {message ? <p className="mb-4 text-sm">{message}</p> : null}
+
+      <h2 className="mb-3 text-xl font-semibold">Saved Events</h2>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2">
+          {events.map((event) => (
+            <article key={event.id} className="rounded border p-3">
+              {event.imageUrl ? (
+                <img
+                  src={event.imageUrl}
+                  alt={event.title}
+                  className="mb-2 h-44 w-full rounded object-cover"
+                />
+              ) : null}
+              <h3 className="font-semibold">{event.title}</h3>
+              <p className="text-sm text-gray-600">{event.date}</p>
+              <p className="mt-1 text-sm">{event.description}</p>
+            </article>
           ))}
         </div>
-      ) : (
-        <p>No users found</p>
       )}
-    </div>
+    </main>
   );
 }
