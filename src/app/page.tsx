@@ -8,8 +8,26 @@ import { Calendar, Instagram, Users, Github, Linkedin } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useState, useEffect } from "react";
+import { db } from "@/firebase"; // Double check if it's "@/src/firebase" based on your folder
+import { collection, getDocs } from "firebase/firestore";
+
 
 export default function Home() {
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const querySnapshot = await getDocs(collection(db, "events"));
+      const eventsList = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setEvents(eventsList);
+    };
+    fetchEvents();
+  }, []);
+  
   return (
     <div className="min-h-screen">
       <div className="pt-16 pb-16 px-4">
@@ -69,7 +87,8 @@ export default function Home() {
 
             <TabsContent value="events" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1, 2, 3].map((i) => (
+                {events.map((event, i) => (
+                
                   <Card
                     key={i}
                     className="overflow-hidden hover:shadow-lg transition-shadow"
@@ -80,13 +99,15 @@ export default function Home() {
                       </div>
                       <div className="p-6">
                         <div className="text-sm text-pink-600 mb-2">
-                          Mar {i + 15}, 2024
+                          {event.date}
                         </div>
                         <h3 className="font-bold mb-2">
-                          Bloomberg Cybersecurity Workshop
+                          {event.name}
+                          
+                          
                         </h3>
                         <p className="text-sm text-gray-600">
-                          Lorem ipsum dolor sit amet
+                          {event.description}
                         </p>
                       </div>
                     </CardContent>
