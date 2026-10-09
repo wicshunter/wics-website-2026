@@ -111,7 +111,7 @@ export default function Home() {
     </h2>
     <p className="text-base text-black">
       From hands-on workshops to networking and community events,
-      there's always something to explore!
+      there&apos;s always something to explore!
     </p>
   </div>
 
@@ -152,7 +152,7 @@ export default function Home() {
           Bring your creativity to life and make lasting memories
           through fun community events throughout the year!
           From cookie decorating and tote bag painting to hackathons
-          and keychain making, there's always something exciting
+          and keychain making, there&apos; always something exciting
           to try, new friendships to build, and memories to create
           together!
         </p>
@@ -189,8 +189,8 @@ export default function Home() {
           alongside fellow WiCS members! Join beginner-friendly
           coding workshops covering HTML and CSS, and gain valuable
           insights from students and alumni through career panels.
-          Whether you're a complete beginner or looking to level
-          up your skills, there's something for everyone.
+          Whether you&apos;re a complete beginner
+          up your skills, there&apos; something for everyone.
         </p>
       </div>
     </div>
