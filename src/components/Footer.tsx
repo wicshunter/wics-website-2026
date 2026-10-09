@@ -59,11 +59,18 @@ const socialLinks = [
 ];
 
 // Component for menu links
+
 const MenuLinks = () => (
-  <ul className="flex flex-col sm:flex-row sm:gap-8 items-center gap-2 text-sm text-[#4B5563]">
+  <ul
+    className="flex flex-col sm:flex-row sm:gap-6 items-center gap-3 text-[10px] text-[#4B5563]"
+    style={{ fontFamily: "var(--font-press-start), monospace" }}
+  >
     {menuLinks.map(({ href, label }) => (
       <li key={href}>
-        <Link className="hover:text-hotpink" href={href}>
+        <Link
+          className="transition-colors duration-200 hover:text-[#D96A9C]"
+          href={href}
+        >
           {label}
         </Link>
       </li>
@@ -118,7 +125,7 @@ export default function Footer() {
 
           <span className="block border-t border-[#4b55636b] my-4 w-[90%]"></span>
           <h1 className="text-[#4B5563] pb-2 text-sm">
-            © 2025 Hunter WiCS. All rights reserved.
+            © 2026 Hunter WiCS. All rights reserved.
           </h1>
         </div>
       </div>
