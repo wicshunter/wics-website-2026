@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Press_Start_2P  } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,6 +9,11 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import { AuthProvider } from "../context/AuthContenxt";
 
 const inter = Inter({ subsets: ["latin"] });
+const pressStart = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-press-start",
+});
 
 export const metadata: Metadata = {
   title: "WiCS Hunter College | Women in Computer Science",
@@ -35,7 +40,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-  <body className={`${inter.className} bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8] min-h-screen`}>
+      <body className={`${inter.className} ${pressStart.variable} bg-[#FFF4F4] min-h-screen`}>
           <AuthProvider>
             <Navbar />
             {children}

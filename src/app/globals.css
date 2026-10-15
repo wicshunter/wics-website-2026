@@ -1,3 +1,5 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -141,5 +143,41 @@
 @layer base{
   label{
     @apply font-inter;
+  }
+}
+
+.font-pixel{
+  font-family: 'Press Start 2P', monospace;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+/* WiCS Pixel-Style Headings */
+h1, h2, h3 {
+  font-family: var(--font-press-start), monospace !important;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.05em;
+}
+
+/* Continuous Discover WiCS scrolling animation */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 50s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
   }
 }

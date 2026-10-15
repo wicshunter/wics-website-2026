@@ -18,12 +18,6 @@ import { db } from '@/firebase';
 
 /**
  * Navbar Component
- *
- * Renders the website navigation bar with links, user authentication, and a mobile menu.
- * The component is modularized into subcomponents for readability:
- *   - NavigationLinks: renders the main navigation links (Home, Events, Resources, Team)
-
- *
  * @constant {Array} navLinks - Array of main navigation link objects, each containing:
  *   @property {string} href - URL path for the link
  *   @property {string} label - Display label for the link
@@ -45,9 +39,10 @@ type NavLink = {
 const navLinks: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '/events', label: 'Events' },
+  { href: '/about/officers', label: 'E-Board' },
   { href: '/resources', label: 'Resources' },
-  { href: '/about/officers', label: 'Team' },
 ];
+
 
 const NavigationLinks = ({
   path,
@@ -56,11 +51,14 @@ const NavigationLinks = ({
   path: string;
   closeDropdowns: () => void;
 }) => (
-  <ul className="flex flex-row items-center gap-10 md:text-lg lg:text-xl">
+  <ul className="flex flex-row items-center gap-20">
     {navLinks.map(({ href, label }) => (
       <li key={href} className="pb-0.5">
         <Link
-          className={`font-semibold hover:text-hotpink ${
+          style={{
+            fontFamily: 'var(--font-press-start), monospace',
+          }}
+          className={`text-[11px] font-normal hover:text-hotpink ${
             path === href ? 'text-hotpink' : 'text-grey'
           }`}
           href={href}
@@ -72,6 +70,7 @@ const NavigationLinks = ({
     ))}
   </ul>
 );
+
 
 export default function Navbar() {
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
@@ -104,30 +103,52 @@ export default function Navbar() {
   }, [user]);
 
   return (
-    <header className="text-pink py-4 bg-gradient-to-r from-[#fdf2f8] via-white to-[#fdf2f8] shadow-[0px_6px_13.3px_rgba(0,0,0,0.25)] relative rounded-full mt-[2%] mx-auto font-inter font-semibold w-fit pl-8 pr-8">
-      <div className="container flex justify-center items-center">
-        {/* Desktop navigation */}
-        <div className="hidden md:flex md:flex-row items-center text-grey">
-          <NavigationLinks path={path || ''} closeDropdowns={closeDropdowns} />
-        </div>
+    <header className="relative mx-auto mt-6 w-full max-w-7xl px-6">
+      <div className="flex items-center gap-6">
 
-        {/* Mobile menu button (optional) */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="text-pink focus:outline-none"
-          >
-            {menuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <MenuIcon className="w-6 h-6" />
-            )}
-          </button>
+        {/* WiCS Logo */}
+        <Link href="/" className="shrink-0">
+          <img
+            src="/images/wics_logo.png"
+            alt="Hunter College WiCS Logo"
+            className="h-36 w-36 object-contain"
+          />
+        </Link>
+
+        {/* Pink Navigation Bar */}
+        <div className="flex flex-1 items-center justify-center rounded-full border border-[#F4C2D7] bg-[#FFF7FA] px-8 py-4 font-press-start font-semibold shadow-[0_4px_16px_rgba(185,163,213,0.15)]">
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center text-grey">
+            <NavigationLinks
+              path={path || ''}
+              closeDropdowns={closeDropdowns}
+            />
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-pink focus:outline-none"
+              aria-label="Toggle navigation menu"
+            >
+              {menuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <MenuIcon className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      {/* Existing Mobile Menu */}
+      <Menu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+      />
     </header>
   );
+
 }
